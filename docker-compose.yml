@@ -1,0 +1,10 @@
+services:
+  devkitarm:
+    image: devkitpro/devkitarm:latest
+    container_name: fireredlagacy
+    working_dir: /project
+    environment:
+      - GIT_DISCOVERY_ACROSS_FILESYSTEM=1
+    volumes:
+      - ./:/project
+    tty: true
