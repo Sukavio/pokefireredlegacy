@@ -144,8 +144,8 @@ u8 CountPartyNonEggMons(void)
 
     for (i = 0, count = 0; i < PARTY_SIZE; i++)
     {
-        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_NONE
-                && !GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG))
+        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL) != SPECIES_NONE
+                && !GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG, NULL))
             count++;
     }
 
@@ -159,9 +159,9 @@ u8 CountPartyAliveNonEggMonsExcept(u8 slotToIgnore)
     for (i = 0, count = 0; i < PARTY_SIZE; i++)
     {
         if (i != slotToIgnore
-                && GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_NONE
-                && !GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG)
-                && GetMonData(&gPlayerParty[i], MON_DATA_HP) != 0)
+                && GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL) != SPECIES_NONE
+                && !GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG, NULL)
+                && GetMonData(&gPlayerParty[i], MON_DATA_HP, NULL) != 0)
             count++;
     }
 
@@ -179,7 +179,7 @@ u8 CountPartyMons(void)
 
     for (i = 0, count = 0; i < PARTY_SIZE; i++)
     {
-        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_NONE)
+        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL) != SPECIES_NONE)
             count++;
     }
 

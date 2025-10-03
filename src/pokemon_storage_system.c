@@ -27,7 +27,7 @@ void SetCurrentBox(u8 boxId)
 u32 GetBoxMonDataAt(u8 boxId, u8 boxPosition, s32 request)
 {
     if (boxId < TOTAL_BOXES_COUNT && boxPosition < IN_BOX_COUNT)
-        return GetBoxMonData(&gPokemonStoragePtr->boxes[boxId][boxPosition], request);
+        return GetBoxMonData(&gPokemonStoragePtr->boxes[boxId][boxPosition], request, NULL);
     else
         return 0;
 }
@@ -153,7 +153,7 @@ s16 SeekToNextMonInBox(struct BoxPokemon * boxMons, s8 curIndex, u8 maxIndex, u8
     {
         for (i = curIndex + adder; i >= 0 && i <= maxIndex; i += adder)
         {
-            if (GetBoxMonData(&boxMons[i], MON_DATA_SPECIES) != SPECIES_NONE)
+            if (GetBoxMonData(&boxMons[i], MON_DATA_SPECIES, NULL) != SPECIES_NONE)
                 return i;
         }
     }
@@ -161,8 +161,8 @@ s16 SeekToNextMonInBox(struct BoxPokemon * boxMons, s8 curIndex, u8 maxIndex, u8
     {
         for (i = curIndex + adder; i >= 0 && i <= maxIndex; i += adder)
         {
-            if (GetBoxMonData(&boxMons[i], MON_DATA_SPECIES) != SPECIES_NONE
-                && !GetBoxMonData(&boxMons[i], MON_DATA_IS_EGG))
+            if (GetBoxMonData(&boxMons[i], MON_DATA_SPECIES, NULL) != SPECIES_NONE
+                && !GetBoxMonData(&boxMons[i], MON_DATA_IS_EGG, NULL))
                 return i;
         }
     }

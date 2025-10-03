@@ -352,7 +352,7 @@ void StartLegendaryBattle(void)
     LockPlayerFieldControls();
     gMain.savedCallback = CB2_EndScriptedWildBattle;
     gBattleTypeFlags = BATTLE_TYPE_LEGENDARY | BATTLE_TYPE_LEGENDARY_FRLG;
-    species = GetMonData(&gEnemyParty[0], MON_DATA_SPECIES);
+    species = GetMonData(&gEnemyParty[0], MON_DATA_SPECIES, NULL);
     switch (species)
     {
     case SPECIES_MEWTWO:
@@ -545,11 +545,11 @@ static u16 GetSumOfPlayerPartyLevel(u8 numMons)
 
     for (i = 0; i < PARTY_SIZE; ++i)
     {
-        u32 species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES_OR_EGG);
+        u32 species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES_OR_EGG, NULL);
 
-        if (species != SPECIES_EGG && species != SPECIES_NONE && GetMonData(&gPlayerParty[i], MON_DATA_HP) != 0)
+        if (species != SPECIES_EGG && species != SPECIES_NONE && GetMonData(&gPlayerParty[i], MON_DATA_HP, NULL) != 0)
         {
-            sum += GetMonData(&gPlayerParty[i], MON_DATA_LEVEL);
+            sum += GetMonData(&gPlayerParty[i], MON_DATA_LEVEL, NULL);
             if (--numMons == 0)
                 break;
         }
@@ -575,7 +575,7 @@ static u8 GetSumOfEnemyPartyLevel(u16 opponentId, u8 numMons)
 static u8 GetWildBattleTransition(void)
 {
     u8 transitionType = GetBattleTransitionTypeByMap();
-    u8 enemyLevel = GetMonData(&gEnemyParty[0], MON_DATA_LEVEL);
+    u8 enemyLevel = GetMonData(&gEnemyParty[0], MON_DATA_LEVEL, NULL);
     u8 playerLevel = GetSumOfPlayerPartyLevel(1);
 
     if (enemyLevel < playerLevel)
@@ -622,7 +622,7 @@ static u8 GetTrainerBattleTransition(void)
 
 u8 BattleSetup_GetBattleTowerBattleTransition(void)
 {
-    u8 enemyLevel = GetMonData(&gEnemyParty[0], MON_DATA_LEVEL);
+    u8 enemyLevel = GetMonData(&gEnemyParty[0], MON_DATA_LEVEL, NULL);
     u8 playerLevel = GetSumOfPlayerPartyLevel(1);
 
     if (enemyLevel < playerLevel)

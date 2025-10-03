@@ -948,12 +948,12 @@ static void CB2_CreateTradeMenu(void)
         for (i = 0; i < sTradeMenu->partyCounts[TRADE_PLAYER]; i++)
         {
             struct Pokemon * mon = &gPlayerParty[i];
-            sTradeMenu->partySpriteIds[TRADE_PLAYER][i] = CreateMonIcon(GetMonData(mon, MON_DATA_SPECIES_OR_EGG),
+            sTradeMenu->partySpriteIds[TRADE_PLAYER][i] = CreateMonIcon(GetMonData(mon, MON_DATA_SPECIES_OR_EGG, NULL),
                                                                 SpriteCB_MonIcon,
                                                                 (sTradeMonSpriteCoords[i][0] * 8) + 14,
                                                                 (sTradeMonSpriteCoords[i][1] * 8) - 12,
                                                                 1,
-                                                                GetMonData(mon, MON_DATA_PERSONALITY),
+                                                                GetMonData(mon, MON_DATA_PERSONALITY, NULL),
                                                                 TRUE);
         }
 
@@ -965,7 +965,7 @@ static void CB2_CreateTradeMenu(void)
                                                                 (sTradeMonSpriteCoords[i + PARTY_SIZE][0] * 8) + 14,
                                                                 (sTradeMonSpriteCoords[i + PARTY_SIZE][1] * 8) - 12,
                                                                 1,
-                                                                GetMonData(mon, MON_DATA_PERSONALITY),
+                                                                GetMonData(mon, MON_DATA_PERSONALITY, NULL),
                                                                 FALSE);
         }
         gMain.state++;
@@ -1150,7 +1150,7 @@ void CB2_ReturnToTradeMenuFromSummary(void)
                 sTradeMonSpriteCoords[i][0] * 8 + 14,
                 sTradeMonSpriteCoords[i][1] * 8 - 12,
                 1,
-                GetMonData(&gPlayerParty[i], MON_DATA_PERSONALITY),
+                GetMonData(&gPlayerParty[i], MON_DATA_PERSONALITY, NULL),
                 TRUE
             );
         }
@@ -1162,7 +1162,7 @@ void CB2_ReturnToTradeMenuFromSummary(void)
                 sTradeMonSpriteCoords[i + PARTY_SIZE][0] * 8 + 14,
                 sTradeMonSpriteCoords[i + PARTY_SIZE][1] * 8 - 12,
                 1,
-                GetMonData(&gEnemyParty[i], MON_DATA_PERSONALITY),
+                GetMonData(&gEnemyParty[i], MON_DATA_PERSONALITY, NULL),
                 FALSE
             );
         }
@@ -1554,11 +1554,11 @@ static bool8 BufferTradeParties(void)
         for (i = 0, mon = gEnemyParty; i < PARTY_SIZE; mon++, i++)
         {
             u8 name[POKEMON_NAME_LENGTH + 1];
-            u16 species = GetMonData(mon, MON_DATA_SPECIES);
+            u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
 
             if (species != SPECIES_NONE)
             {
-                if (species == SPECIES_SHEDINJA && GetMonData(mon, MON_DATA_LANGUAGE) != LANGUAGE_JAPANESE)
+                if (species == SPECIES_SHEDINJA && GetMonData(mon, MON_DATA_LANGUAGE, NULL) != LANGUAGE_JAPANESE)
                 {
                     GetMonData(mon, MON_DATA_NICKNAME, name);
 
@@ -1962,7 +1962,7 @@ static u8 CheckValidityOfTradeMons(u8 *aliveMons, u8 playerPartyCount, u8 cursor
     }
 
     // Partner cant trade illegitimate Deoxys or Mew
-    partnerSpecies = GetMonData(&gEnemyParty[sTradeMenu->partnerCursorPosition % PARTY_SIZE], MON_DATA_SPECIES);
+    partnerSpecies = GetMonData(&gEnemyParty[sTradeMenu->partnerCursorPosition % PARTY_SIZE], MON_DATA_SPECIES, NULL);
 
     if (hasLiveMon != 0)
         hasLiveMon = BOTH_MONS_VALID;
@@ -2650,12 +2650,12 @@ static void ComputePartyTradeableFlags(u8 whichParty)
     case TRADE_PLAYER:
         for (i = 0; i < sTradeMenu->partyCounts[whichParty]; i++)
         {
-            if (GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG) == TRUE)
+            if (GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG, NULL) == TRUE)
             {
                 sTradeMenu->isLiveMon[whichParty][i] = FALSE;
                 sTradeMenu->isEgg[whichParty][i] = TRUE;
             }
-            else if (GetMonData(&gPlayerParty[i], MON_DATA_HP) == 0)
+            else if (GetMonData(&gPlayerParty[i], MON_DATA_HP, NULL) == 0)
             {
                 sTradeMenu->isLiveMon[whichParty][i] = FALSE;
                 sTradeMenu->isEgg[whichParty][i] = FALSE;
@@ -2670,12 +2670,12 @@ static void ComputePartyTradeableFlags(u8 whichParty)
     case TRADE_PARTNER:
         for (i = 0; i < sTradeMenu->partyCounts[whichParty]; i++)
         {
-            if (GetMonData(&gEnemyParty[i], MON_DATA_IS_EGG) == TRUE)
+            if (GetMonData(&gEnemyParty[i], MON_DATA_IS_EGG, NULL) == TRUE)
             {
                 sTradeMenu->isLiveMon[whichParty][i] = FALSE;
                 sTradeMenu->isEgg[whichParty][i] = TRUE;
             }
-            else if (GetMonData(&gEnemyParty[i], MON_DATA_HP) == 0)
+            else if (GetMonData(&gEnemyParty[i], MON_DATA_HP, NULL) == 0)
             {
                 sTradeMenu->isLiveMon[whichParty][i] = FALSE;
                 sTradeMenu->isEgg[whichParty][i] = FALSE;
@@ -2699,16 +2699,16 @@ static void ComputePartyHPBarLevels(u8 whichParty)
     case TRADE_PLAYER:
         for (i = 0; i < sTradeMenu->partyCounts[TRADE_PLAYER]; i++)
         {
-            curHp = GetMonData(&gPlayerParty[i], MON_DATA_HP);
-            maxHp = GetMonData(&gPlayerParty[i], MON_DATA_MAX_HP);
+            curHp = GetMonData(&gPlayerParty[i], MON_DATA_HP, NULL);
+            maxHp = GetMonData(&gPlayerParty[i], MON_DATA_MAX_HP, NULL);
             sTradeMenu->hpBarLevels[TRADE_PLAYER][i] = GetHPBarLevel(curHp, maxHp);
         }
         break;
     case TRADE_PARTNER:
         for (i = 0; i < sTradeMenu->partyCounts[TRADE_PARTNER]; i++)
         {
-            curHp = GetMonData(&gEnemyParty[i], MON_DATA_HP);
-            maxHp = GetMonData(&gEnemyParty[i], MON_DATA_MAX_HP);
+            curHp = GetMonData(&gEnemyParty[i], MON_DATA_HP, NULL);
+            maxHp = GetMonData(&gEnemyParty[i], MON_DATA_MAX_HP, NULL);
             sTradeMenu->hpBarLevels[TRADE_PARTNER][i] = GetHPBarLevel(curHp, maxHp);
         }
         break;
@@ -2744,8 +2744,8 @@ static u32 CanTradeSelectedMon(struct Pokemon * playerParty, int partyCount, int
 
     for (i = 0; i < partyCount; i++)
     {
-        species2[i] = GetMonData(&playerParty[i], MON_DATA_SPECIES_OR_EGG);
-        species[i] = GetMonData(&playerParty[i], MON_DATA_SPECIES);
+        species2[i] = GetMonData(&playerParty[i], MON_DATA_SPECIES_OR_EGG, NULL);
+        species[i] = GetMonData(&playerParty[i], MON_DATA_SPECIES, NULL);
     }
 
     // Cant trade Eggs or non-Kanto mons if player doesn't have National Dex

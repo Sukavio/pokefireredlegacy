@@ -282,7 +282,7 @@ void BattleAI_HandleItemUseBeforeAISetup(void)
         && !(gBattleTypeFlags & (BATTLE_TYPE_TRAINER_TOWER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_BATTLE_TOWER | BATTLE_TYPE_SAFARI | BATTLE_TYPE_LINK))
         )
     {
-        u16 *items = gTrainers[gTrainerBattleOpponent_A].trainerType.trainer.items;
+        const u16 *items = gTrainers[gTrainerBattleOpponent_A].trainerType.trainer.items;
         for (i = 0; i < MAX_TRAINER_ITEMS; i++)
         {
             if (items[i] != 0)
@@ -1125,9 +1125,9 @@ static void Cmd_count_alive_pokemon(void)
     for (i = 0; i < PARTY_SIZE; i++)
     {
         if (i != battlerOnField1 && i != battlerOnField2
-         && GetMonData(&party[i], MON_DATA_HP) != 0
-         && GetMonData(&party[i], MON_DATA_SPECIES_OR_EGG) != SPECIES_NONE
-         && GetMonData(&party[i], MON_DATA_SPECIES_OR_EGG) != SPECIES_EGG)
+         && GetMonData(&party[i], MON_DATA_HP, NULL) != 0
+         && GetMonData(&party[i], MON_DATA_SPECIES_OR_EGG, NULL) != SPECIES_NONE
+         && GetMonData(&party[i], MON_DATA_SPECIES_OR_EGG, NULL) != SPECIES_EGG)
         {
             AI_THINKING_STRUCT->funcResult++;
         }
@@ -1332,9 +1332,9 @@ static void Cmd_if_status_in_party(void)
 
     for (i = 0; i < PARTY_SIZE; i++)
     {
-        u16 species = GetMonData(&party[i], MON_DATA_SPECIES);
-        u16 hp = GetMonData(&party[i], MON_DATA_HP);
-        u32 status = GetMonData(&party[i], MON_DATA_STATUS);
+        u16 species = GetMonData(&party[i], MON_DATA_SPECIES, NULL);
+        u16 hp = GetMonData(&party[i], MON_DATA_HP, NULL);
+        u32 status = GetMonData(&party[i], MON_DATA_STATUS, NULL);
 
         if (species != SPECIES_NONE && species != SPECIES_EGG && hp != 0 && status == statusToCompareTo)
         {
@@ -1369,9 +1369,9 @@ static void Cmd_if_status_not_in_party(void)
 
     for (i = 0; i < PARTY_SIZE; i++)
     {
-        u16 species = GetMonData(&party[i], MON_DATA_SPECIES);
-        u16 hp = GetMonData(&party[i], MON_DATA_HP);
-        u32 status = GetMonData(&party[i], MON_DATA_STATUS);
+        u16 species = GetMonData(&party[i], MON_DATA_SPECIES, NULL);
+        u16 hp = GetMonData(&party[i], MON_DATA_HP, NULL);
+        u32 status = GetMonData(&party[i], MON_DATA_STATUS, NULL);
 
         // everytime the status is found, the AI's logic jumps further and further past its intended destination. this results in a broken AI macro and is probably why it is unused.
         if (species != SPECIES_NONE && species != SPECIES_EGG && hp != 0 && status == statusToCompareTo)

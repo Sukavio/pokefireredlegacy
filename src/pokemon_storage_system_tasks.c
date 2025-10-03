@@ -2474,7 +2474,7 @@ static void SetPartySlotTilemaps(void)
     // as if it has a Pokémon in it
     for (i = 1; i < PARTY_SIZE; i++)
     {
-        s32 species = GetMonData(gPlayerParty + i, MON_DATA_SPECIES);
+        s32 species = GetMonData(gPlayerParty + i, MON_DATA_SPECIES, NULL);
         SetPartySlotTilemap(i, (species != SPECIES_NONE));
     }
 }
@@ -2680,7 +2680,7 @@ static void SetPokeStorageQuestLogEvent(u8 action)
     if (sInPartyMenu)
     {
         box2 = TOTAL_BOXES_COUNT;
-        species2 = GetMonData(&gPlayerParty[GetBoxCursorPosition()], MON_DATA_SPECIES_OR_EGG);
+        species2 = GetMonData(&gPlayerParty[GetBoxCursorPosition()], MON_DATA_SPECIES_OR_EGG, NULL);
     }
     else
     {

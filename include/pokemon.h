@@ -334,18 +334,11 @@ u8 GetGenderFromSpeciesAndPersonality(u16 species, u32 personality);
 void SetMultiuseSpriteTemplateToPokemon(u16 speciesTag, u8 battlerPosition);
 void SetMultiuseSpriteTemplateToTrainerBack(u16 trainerSpriteId, u8 battlerPosition);
 
-// These are full type signatures for GetMonData() and GetBoxMonData(),
-// but they are not used since some code erroneously omits the third arg.
-// u32 GetMonData(struct Pokemon *mon, s32 field, u8 *data);
-// u32 GetBoxMonData(struct BoxPokemon *boxMon, s32 field, u8 *data);
-
-#ifdef IS_POKEMON_C
-u32 GetMonData(struct Pokemon *, s32, u8 *);
-u32 GetBoxMonData(struct BoxPokemon *, s32, u8 *);
-#else
-u32 GetMonData();
-u32 GetBoxMonData();
-#endif // IS_POKEMON_C
+// pokemon.h
+u32 GetMonData(struct Pokemon *mon, s32 field, u8 *data);
+u32 GetBoxMonData(struct BoxPokemon *boxMon, s32 field, u8 *data);
+void SetMonData(struct Pokemon *mon, s32 field, const void *src);
+void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *src);
 
 void SetMonData(struct Pokemon *mon, s32 field, const void *dataArg);
 void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg);

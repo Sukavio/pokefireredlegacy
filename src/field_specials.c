@@ -163,17 +163,17 @@ void SetHiddenItemFlag(void)
 u8 GetLeadMonFriendship(void)
 {
     struct Pokemon * pokemon = &gPlayerParty[GetLeadMonIndex()];
-    if (GetMonData(pokemon, MON_DATA_FRIENDSHIP) == 255)
+    if (GetMonData(pokemon, MON_DATA_FRIENDSHIP, NULL) == 255)
         return 6;
-    else if (GetMonData(pokemon, MON_DATA_FRIENDSHIP) >= 200)
+    else if (GetMonData(pokemon, MON_DATA_FRIENDSHIP, NULL) >= 200)
         return 5;
-    else if (GetMonData(pokemon, MON_DATA_FRIENDSHIP) >= 150)
+    else if (GetMonData(pokemon, MON_DATA_FRIENDSHIP, NULL) >= 150)
         return 4;
-    else if (GetMonData(pokemon, MON_DATA_FRIENDSHIP) >= 100)
+    else if (GetMonData(pokemon, MON_DATA_FRIENDSHIP, NULL) >= 100)
         return 3;
-    else if (GetMonData(pokemon, MON_DATA_FRIENDSHIP) >= 50)
+    else if (GetMonData(pokemon, MON_DATA_FRIENDSHIP, NULL) >= 50)
         return 2;
-    else if (GetMonData(pokemon, MON_DATA_FRIENDSHIP) > 0)
+    else if (GetMonData(pokemon, MON_DATA_FRIENDSHIP, NULL) > 0)
         return 1;
     else
         return 0;
@@ -194,11 +194,11 @@ bool8 PlayerHasGrassPokemonInParty(void)
     for (i = 0; i < PARTY_SIZE; i++)
     {
         pokemon = &gPlayerParty[i];
-        if (GetMonData(pokemon, MON_DATA_SANITY_HAS_SPECIES)
-         && !GetMonData(pokemon, MON_DATA_IS_EGG)
+        if (GetMonData(pokemon, MON_DATA_SANITY_HAS_SPECIES, NULL)
+         && !GetMonData(pokemon, MON_DATA_IS_EGG, NULL)
         )
         {
-            species = GetMonData(pokemon, MON_DATA_SPECIES);
+            species = GetMonData(pokemon, MON_DATA_SPECIES, NULL);
             if (gSpeciesInfo[species].types[0] == TYPE_GRASS || gSpeciesInfo[species].types[1] == TYPE_GRASS)
                 return TRUE;
         }
@@ -2264,13 +2264,13 @@ bool8 CapeBrinkGetMoveToTeachLeadPokemon(void)
         StringCopy(gStringVar2, gMoveNames[MOVE_HYDRO_CANNON]);
         gSpecialVar_0x8005 = MOVETUTOR_HYDRO_CANNON;
     }
-    if (GetMonData(&gPlayerParty[leadMonSlot], MON_DATA_MOVE1) != MOVE_NONE)
+    if (GetMonData(&gPlayerParty[leadMonSlot], MON_DATA_MOVE1, NULL) != MOVE_NONE)
         numMovesKnown++;
-    if (GetMonData(&gPlayerParty[leadMonSlot], MON_DATA_MOVE2) != MOVE_NONE)
+    if (GetMonData(&gPlayerParty[leadMonSlot], MON_DATA_MOVE2, NULL) != MOVE_NONE)
         numMovesKnown++;
-    if (GetMonData(&gPlayerParty[leadMonSlot], MON_DATA_MOVE3) != MOVE_NONE)
+    if (GetMonData(&gPlayerParty[leadMonSlot], MON_DATA_MOVE3, NULL) != MOVE_NONE)
         numMovesKnown++;
-    if (GetMonData(&gPlayerParty[leadMonSlot], MON_DATA_MOVE4) != MOVE_NONE)
+    if (GetMonData(&gPlayerParty[leadMonSlot], MON_DATA_MOVE4, NULL) != MOVE_NONE)
         numMovesKnown++;
     gSpecialVar_0x8006 = numMovesKnown;
     return TRUE;
@@ -2466,7 +2466,7 @@ bool8 IsBadEggInParty(void)
     u8 i;
     for (i = 0; i < partyCount; i++)
     {
-        if (GetMonData(&gPlayerParty[i], MON_DATA_SANITY_IS_BAD_EGG) == TRUE)
+        if (GetMonData(&gPlayerParty[i], MON_DATA_SANITY_IS_BAD_EGG, NULL) == TRUE)
             return TRUE;
     }
     return FALSE;

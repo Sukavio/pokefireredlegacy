@@ -506,7 +506,7 @@ static void MultiMove_CreatePlacedMonIcons(void)
         u8 boxPosition = (IN_BOX_COLUMNS * i) + sMultiMove->minColumn;
         for (j = sMultiMove->minColumn; j < columnCount; j++)
         {
-            if (GetBoxMonData(&sMultiMove->boxMons[monArrayId], MON_DATA_SANITY_HAS_SPECIES))
+            if (GetBoxMonData(&sMultiMove->boxMons[monArrayId], MON_DATA_SANITY_HAS_SPECIES, NULL))
                 CreateBoxMonIconAtPos(boxPosition);
             monArrayId++;
             boxPosition++;
@@ -527,7 +527,7 @@ static void MultiMove_SetPlacedMonData(void)
         u8 boxPosition = (IN_BOX_COLUMNS * i) + sMultiMove->minColumn;
         for (j = sMultiMove->minColumn; j < columnCount; j++)
         {
-            if (GetBoxMonData(&sMultiMove->boxMons[monArrayId], MON_DATA_SANITY_HAS_SPECIES))
+            if (GetBoxMonData(&sMultiMove->boxMons[monArrayId], MON_DATA_SANITY_HAS_SPECIES, NULL))
                 SetBoxMonAt(boxId, boxPosition, &sMultiMove->boxMons[monArrayId]);
             boxPosition++;
             monArrayId++;
@@ -562,7 +562,7 @@ bool8 MultiMove_CanPlaceSelection(void)
         u8 boxPosition = (IN_BOX_COLUMNS * i) + sMultiMove->minColumn;
         for (j = sMultiMove->minColumn; j < columnCount; j++)
         {
-            if (GetBoxMonData(&sMultiMove->boxMons[monArrayId], MON_DATA_SANITY_HAS_SPECIES)
+            if (GetBoxMonData(&sMultiMove->boxMons[monArrayId], MON_DATA_SANITY_HAS_SPECIES, NULL)
                 && GetCurrentBoxMonData(boxPosition, MON_DATA_SANITY_HAS_SPECIES))
                 return FALSE;
 
@@ -732,9 +732,9 @@ void TryLoadItemIconAtPos(u8 cursorArea, u8 cursorPos)
         heldItem = GetCurrentBoxMonData(cursorPos, MON_DATA_HELD_ITEM);
         break;
     case CURSOR_AREA_IN_PARTY:
-        if (!GetMonData(&gPlayerParty[cursorPos], MON_DATA_SANITY_HAS_SPECIES))
+        if (!GetMonData(&gPlayerParty[cursorPos], MON_DATA_SANITY_HAS_SPECIES, NULL))
             return;
-        heldItem = GetMonData(&gPlayerParty[cursorPos], MON_DATA_HELD_ITEM);
+        heldItem = GetMonData(&gPlayerParty[cursorPos], MON_DATA_HELD_ITEM, NULL);
         break;
     default:
         return;
@@ -825,7 +825,7 @@ void Item_SwitchMonsWithMoving(u8 cursorArea, u8 cursorPos)
     }
     else
     {
-        item = GetMonData(&gPlayerParty[cursorPos], MON_DATA_HELD_ITEM);
+        item = GetMonData(&gPlayerParty[cursorPos], MON_DATA_HELD_ITEM, NULL);
         SetMonData(&gPlayerParty[cursorPos], MON_DATA_HELD_ITEM, &gStorage->movingItemId);
         gStorage->movingItemId = item;
     }

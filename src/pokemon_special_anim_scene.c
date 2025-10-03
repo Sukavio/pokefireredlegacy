@@ -400,7 +400,7 @@ void PSA_PrintMessage(u8 messageId)
         StringAppend(scene->textBuf, gText_Period);
         break;
     case 1: // Mon's level was elevated to level
-        level = GetMonData(pokemon, MON_DATA_LEVEL);
+        level = GetMonData(pokemon, MON_DATA_LEVEL, NULL);
         GetMonData(pokemon, MON_DATA_NICKNAME, scene->textBuf);
         str = StringAppend(scene->textBuf, gText_LevelRoseTo);
         if (level < MAX_LEVEL)
@@ -645,8 +645,8 @@ void PSA_CreateMonSpriteAtCloseness(u8 closeness)
 {
     struct PokemonSpecialAnimScene * scene = PSA_GetSceneWork();
     struct Pokemon * pokemon = PSA_GetPokemon();
-    u16 species = GetMonData(pokemon, MON_DATA_SPECIES);
-    u32 personality = GetMonData(pokemon, MON_DATA_PERSONALITY);
+    u16 species = GetMonData(pokemon, MON_DATA_SPECIES, NULL);
+    u32 personality = GetMonData(pokemon, MON_DATA_PERSONALITY, NULL);
     u8 r1 = Menu2_GetMonSpriteAnchorCoord(species, personality, 2);
     void *r6;
     void *r9;

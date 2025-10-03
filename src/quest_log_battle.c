@@ -75,13 +75,13 @@ void TrySetQuestLogBattleEvent(void)
         {
             if (gBattleOutcome == B_OUTCOME_WON)
             {
-                wildData->defeatedSpecies = GetMonData(gEnemyParty, MON_DATA_SPECIES);
+                wildData->defeatedSpecies = GetMonData(gEnemyParty, MON_DATA_SPECIES, NULL);
                 wildData->caughtSpecies = SPECIES_NONE;
             }
             else // gBattleOutcome == B_OUTCOME_CAUGHT
             {
                 wildData->defeatedSpecies = SPECIES_NONE;
-                wildData->caughtSpecies = GetMonData(gEnemyParty, MON_DATA_SPECIES);
+                wildData->caughtSpecies = GetMonData(gEnemyParty, MON_DATA_SPECIES, NULL);
             }
             wildData->mapSec = GetCurrentRegionMapSectionId();
             SetQuestLogEvent(QL_EVENT_DEFEATED_WILD_MON, (const u16 *)wildData);

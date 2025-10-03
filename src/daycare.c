@@ -377,7 +377,7 @@ u8 CountPokemonInDaycare(struct DayCare *daycare)
 
     for (i = 0; i < DAYCARE_MON_COUNT; i++)
     {
-        if (GetBoxMonData(&daycare->mons[i].mon, MON_DATA_SPECIES) != 0)
+        if (GetBoxMonData(&daycare->mons[i].mon, MON_DATA_SPECIES, NULL) != 0)
             count++;
     }
 
@@ -391,10 +391,10 @@ void InitDaycareMailRecordMixing(struct DayCare *daycare, struct RecordMixingDay
 
     for (i = 0; i < DAYCARE_MON_COUNT; i++)
     {
-        if (GetBoxMonData(&daycare->mons[i].mon, MON_DATA_SPECIES) != SPECIES_NONE)
+        if (GetBoxMonData(&daycare->mons[i].mon, MON_DATA_SPECIES, NULL) != SPECIES_NONE)
         {
             numDaycareMons++;
-            if (GetBoxMonData(&daycare->mons[i].mon, MON_DATA_HELD_ITEM) == ITEM_NONE)
+            if (GetBoxMonData(&daycare->mons[i].mon, MON_DATA_HELD_ITEM, NULL) == ITEM_NONE)
             {
                 daycareMail->holdsItem[i] = FALSE;
             }
@@ -418,7 +418,7 @@ static s8 Daycare_FindEmptySpot(struct DayCare *daycare)
 
     for (i = 0; i < DAYCARE_MON_COUNT; i++)
     {
-        if (GetBoxMonData(&daycare->mons[i].mon, MON_DATA_SPECIES) == 0)
+        if (GetBoxMonData(&daycare->mons[i].mon, MON_DATA_SPECIES, NULL) == 0)
             return i;
     }
 
@@ -435,8 +435,8 @@ static void StorePokemonInDaycare(struct Pokemon *mon, struct DaycareMon *daycar
         DayCare_GetMonNickname(mon, daycareMon->mail.monName);
 //        StripExtCtrlCodes(daycareMon->mail.monName);
 //        daycareMon->mail.gameLanguage = LANGUAGE_ENGLISH;
-//        daycareMon->mail.monLanguage = GetMonData(mon, MON_DATA_LANGUAGE);
-        mailId = GetMonData(mon, MON_DATA_MAIL);
+//        daycareMon->mail.monLanguage = GetMonData(mon, MON_DATA_LANGUAGE, NULL);
+        mailId = GetMonData(mon, MON_DATA_MAIL, NULL);
         daycareMon->mail.message = gSaveBlock1Ptr->mail[mailId];
         TakeMailFromMon(mon);
     }
@@ -465,8 +465,8 @@ void StoreSelectedPokemonInDaycare(void)
 static void ShiftDaycareSlots(struct DayCare *daycare)
 {
     // This condition is only satisfied when the player takes out the first pokemon from the daycare.
-    if (GetBoxMonData(&daycare->mons[1].mon, MON_DATA_SPECIES) != SPECIES_NONE
-        && GetBoxMonData(&daycare->mons[0].mon, MON_DATA_SPECIES) == SPECIES_NONE)
+    if (GetBoxMonData(&daycare->mons[1].mon, MON_DATA_SPECIES, NULL) != SPECIES_NONE
+        && GetBoxMonData(&daycare->mons[0].mon, MON_DATA_SPECIES, NULL) == SPECIES_NONE)
     {
         daycare->mons[0].mon = daycare->mons[1].mon;
         ZeroBoxMonData(&daycare->mons[1].mon);
@@ -517,13 +517,13 @@ static u16 TakeSelectedPokemonFromDaycare(struct DaycareMon *daycareMon)
     struct Pokemon pokemon;
 
     DayCare_GetBoxMonNickname(&daycareMon->mon, gStringVar1);
-    species = GetBoxMonData(&daycareMon->mon, MON_DATA_SPECIES);
+    species = GetBoxMonData(&daycareMon->mon, MON_DATA_SPECIES, NULL);
     BoxMonToMon(&daycareMon->mon, &pokemon);
 
-    if (GetMonData(&pokemon, MON_DATA_LEVEL) != MAX_LEVEL 
-    && !levelCappedNuzlocke(GetMonData(&pokemon, MON_DATA_LEVEL)))
+    if (GetMonData(&pokemon, MON_DATA_LEVEL, NULL) != MAX_LEVEL
+    && !levelCappedNuzlocke(GetMonData(&pokemon, MON_DATA_LEVEL, NULL)))
     {
-        experience = GetMonData(&pokemon, MON_DATA_EXP) + daycareMon->steps;
+        experience = GetMonData(&pokemon, MON_DATA_EXP, NULL) + daycareMon->steps;
         levelCap = getLevelCap();
         if (experience <= gExperienceTables[gSpeciesInfo[species].growthRate][levelCap])
         {
@@ -570,9 +570,9 @@ static u8 GetLevelAfterDaycareSteps(struct BoxPokemon *mon, u32 steps)
     struct BoxPokemon tempMon = *mon;
 
     u8 levelCap = getLevelCap();
-    u16 species = GetBoxMonData(&tempMon, MON_DATA_SPECIES);
+    u16 species = GetBoxMonData(&tempMon, MON_DATA_SPECIES, NULL);
     u32 experienceDiff;
-    u32 experience = GetBoxMonData(&tempMon, MON_DATA_EXP) + steps;
+    u32 experience = GetBoxMonData(&tempMon, MON_DATA_EXP, NULL) + steps;
     if (experience <= gExperienceTables[gSpeciesInfo[species].growthRate][levelCap])
     {
         SetBoxMonData(&tempMon, MON_DATA_EXP,  &experience);
@@ -634,7 +634,7 @@ static void Debug_AddDaycareSteps(u16 numSteps)
 
 u8 GetNumLevelsGainedFromDaycare(void)
 {
-    if (GetBoxMonData(&gSaveBlock1Ptr->daycare.mons[gSpecialVar_0x8004], MON_DATA_SPECIES) != 0)
+    if (GetBoxMonData(&gSaveBlock1Ptr->daycare.mons[gSpecialVar_0x8004].mon, MON_DATA_SPECIES, NULL) != 0)
         return GetNumLevelsGainedForDaycareMon(&gSaveBlock1Ptr->daycare.mons[gSpecialVar_0x8004]);
 
     return 0;
@@ -723,7 +723,7 @@ static s32 GetParentToInheritNature(struct DayCare *daycare)
     // search for ditto
     for (dittoCount = 0, i = 0; i < DAYCARE_MON_COUNT; i++)
     {
-        species[i] = GetBoxMonData(&daycare->mons[i].mon, MON_DATA_SPECIES);
+        species[i] = GetBoxMonData(&daycare->mons[i].mon, MON_DATA_SPECIES, NULL);
         if (species[i] == SPECIES_DITTO)
             dittoCount++, parent = i;
     }
@@ -738,7 +738,7 @@ static s32 GetParentToInheritNature(struct DayCare *daycare)
     }
 
     // Don't inherit nature if not holding Everstone
-    if (GetBoxMonData(&daycare->mons[parent].mon, MON_DATA_HELD_ITEM) != ITEM_EVERSTONE
+    if (GetBoxMonData(&daycare->mons[parent].mon, MON_DATA_HELD_ITEM, NULL) != ITEM_EVERSTONE
         || Random() >= USHRT_MAX / 2)
     {
         return -1;
@@ -853,27 +853,27 @@ static void InheritIVs(struct Pokemon *egg, struct DayCare *daycare)
         switch (selectedIvs[i])
         {
             case 0:
-                iv = GetBoxMonData(&daycare->mons[whichParent[i]].mon, MON_DATA_HP_IV);
+                iv = GetBoxMonData(&daycare->mons[whichParent[i]].mon, MON_DATA_HP_IV, NULL);
                 SetMonData(egg, MON_DATA_HP_IV, &iv);
                 break;
             case 1:
-                iv = GetBoxMonData(&daycare->mons[whichParent[i]].mon, MON_DATA_ATK_IV);
+                iv = GetBoxMonData(&daycare->mons[whichParent[i]].mon, MON_DATA_ATK_IV, NULL);
                 SetMonData(egg, MON_DATA_ATK_IV, &iv);
                 break;
             case 2:
-                iv = GetBoxMonData(&daycare->mons[whichParent[i]].mon, MON_DATA_DEF_IV);
+                iv = GetBoxMonData(&daycare->mons[whichParent[i]].mon, MON_DATA_DEF_IV, NULL);
                 SetMonData(egg, MON_DATA_DEF_IV, &iv);
                 break;
             case 3:
-                iv = GetBoxMonData(&daycare->mons[whichParent[i]].mon, MON_DATA_SPEED_IV);
+                iv = GetBoxMonData(&daycare->mons[whichParent[i]].mon, MON_DATA_SPEED_IV, NULL);
                 SetMonData(egg, MON_DATA_SPEED_IV, &iv);
                 break;
             case 4:
-                iv = GetBoxMonData(&daycare->mons[whichParent[i]].mon, MON_DATA_SPATK_IV);
+                iv = GetBoxMonData(&daycare->mons[whichParent[i]].mon, MON_DATA_SPATK_IV, NULL);
                 SetMonData(egg, MON_DATA_SPATK_IV, &iv);
                 break;
             case 5:
-                iv = GetBoxMonData(&daycare->mons[whichParent[i]].mon, MON_DATA_SPDEF_IV);
+                iv = GetBoxMonData(&daycare->mons[whichParent[i]].mon, MON_DATA_SPDEF_IV, NULL);
                 SetMonData(egg, MON_DATA_SPDEF_IV, &iv);
                 break;
         }
@@ -892,7 +892,7 @@ u8 GetEggMoves(struct Pokemon *pokemon, u16 *eggMoves)
 
     numEggMoves = 0;
     eggMoveIdx = 0;
-    species = GetEggSpecies(GetMonData(pokemon, MON_DATA_SPECIES));
+    species = GetEggSpecies(GetMonData(pokemon, MON_DATA_SPECIES, NULL));
     for (i = 0; i < NELEMS(gEggMoves) - 1; i++)
     {
         if (gEggMoves[i] == species + EGG_MOVES_SPECIES_OFFSET)
@@ -958,11 +958,11 @@ static void BuildEggMoveset(struct Pokemon *egg, struct BoxPokemon *father, stru
     for (i = 0; i < EGG_LVL_UP_MOVES_ARRAY_COUNT; i++)
         sHatchedEggLevelUpMoves[i] = MOVE_NONE;
 
-    numLevelUpMoves = GetLevelUpMovesBySpecies(GetMonData(egg, MON_DATA_SPECIES), sHatchedEggLevelUpMoves);
+    numLevelUpMoves = GetLevelUpMovesBySpecies(GetMonData(egg, MON_DATA_SPECIES, NULL), sHatchedEggLevelUpMoves);
     for (i = 0; i < MAX_MON_MOVES; i++)
     {
-        sHatchedEggFatherMoves[i] = GetBoxMonData(father, MON_DATA_MOVE1 + i);
-        sHatchedEggMotherMoves[i] = GetBoxMonData(mother, MON_DATA_MOVE1 + i);
+        sHatchedEggFatherMoves[i] = GetBoxMonData(father, MON_DATA_MOVE1 + i, NULL);
+        sHatchedEggMotherMoves[i] = GetBoxMonData(mother, MON_DATA_MOVE1 + i, NULL);
     }
 
     numEggMoves = GetEggMoves(egg, sHatchedEggEggMoves);
@@ -1043,8 +1043,8 @@ static void AlterEggSpeciesWithIncenseItem(u16 *species, struct DayCare *daycare
     u16 motherItem, fatherItem;
     if (*species == SPECIES_WYNAUT || *species == SPECIES_AZURILL)
     {
-        motherItem = GetBoxMonData(&daycare->mons[0].mon, MON_DATA_HELD_ITEM);
-        fatherItem = GetBoxMonData(&daycare->mons[1].mon, MON_DATA_HELD_ITEM);
+        motherItem = GetBoxMonData(&daycare->mons[0].mon, MON_DATA_HELD_ITEM, NULL);
+        fatherItem = GetBoxMonData(&daycare->mons[1].mon, MON_DATA_HELD_ITEM, NULL);
         if (*species == SPECIES_WYNAUT && motherItem != ITEM_LAX_INCENSE && fatherItem != ITEM_LAX_INCENSE)
         {
             *species = SPECIES_WOBBUFFET;
@@ -1059,8 +1059,8 @@ static void AlterEggSpeciesWithIncenseItem(u16 *species, struct DayCare *daycare
 
 static void GiveVoltTackleIfLightBall(struct Pokemon *mon, struct DayCare *daycare)
 {
-    u32 motherItem = GetBoxMonData(&daycare->mons[0].mon, MON_DATA_HELD_ITEM);
-    u32 fatherItem = GetBoxMonData(&daycare->mons[1].mon, MON_DATA_HELD_ITEM);
+    u32 motherItem = GetBoxMonData(&daycare->mons[0].mon, MON_DATA_HELD_ITEM, NULL);
+    u32 fatherItem = GetBoxMonData(&daycare->mons[1].mon, MON_DATA_HELD_ITEM, NULL);
 
     if (motherItem == ITEM_LIGHT_BALL || fatherItem == ITEM_LIGHT_BALL)
     {
@@ -1080,7 +1080,7 @@ static u16 DetermineEggSpeciesAndParentSlots(struct DayCare *daycare, u8 *parent
     // 1st index is the father slot.
     for (i = 0; i < DAYCARE_MON_COUNT; i++)
     {
-        species[i] = GetBoxMonData(&daycare->mons[i].mon, MON_DATA_SPECIES);
+        species[i] = GetBoxMonData(&daycare->mons[i].mon, MON_DATA_SPECIES, NULL);
         if (species[i] == SPECIES_DITTO)
         {
             parentSlots[0] = i ^ 1;
@@ -1197,7 +1197,7 @@ static bool8 TryProduceOrHatchEgg(struct DayCare *daycare)
 
     for (i = 0; i < DAYCARE_MON_COUNT; i++)
     {
-        if (GetBoxMonData(&daycare->mons[i].mon, MON_DATA_SANITY_HAS_SPECIES))
+        if (GetBoxMonData(&daycare->mons[i].mon, MON_DATA_SANITY_HAS_SPECIES, NULL))
             daycare->mons[i].steps++, validEggs++;
     }
 
@@ -1216,12 +1216,12 @@ static bool8 TryProduceOrHatchEgg(struct DayCare *daycare)
 
         for (i = 0; i < gPlayerPartyCount; i++)
         {
-            if (!GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG))
+            if (!GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG, NULL))
                 continue;
-            if (GetMonData(&gPlayerParty[i], MON_DATA_SANITY_IS_BAD_EGG))
+            if (GetMonData(&gPlayerParty[i], MON_DATA_SANITY_IS_BAD_EGG, NULL))
                 continue;
 
-            steps = GetMonData(&gPlayerParty[i], MON_DATA_FRIENDSHIP);
+            steps = GetMonData(&gPlayerParty[i], MON_DATA_FRIENDSHIP, NULL);
             if (steps != 0)
             {
                 if(steps >= toSub)
@@ -1244,7 +1244,7 @@ static bool8 TryProduceOrHatchEgg(struct DayCare *daycare)
 
 bool8 ShouldEggHatch(void)
 {
-    if (GetBoxMonData(&gSaveBlock1Ptr->route5DayCareMon.mon, MON_DATA_SANITY_HAS_SPECIES))
+    if (GetBoxMonData(&gSaveBlock1Ptr->route5DayCareMon.mon, MON_DATA_SANITY_HAS_SPECIES, NULL))
         gSaveBlock1Ptr->route5DayCareMon.steps++;
     return TryProduceOrHatchEgg(&gSaveBlock1Ptr->daycare);
 }
@@ -1260,14 +1260,14 @@ static bool8 IsEggPending(struct DayCare *daycare)
 static void _GetDaycareMonNicknames(struct DayCare *daycare)
 {
     u8 text[12];
-    if (GetBoxMonData(&daycare->mons[0].mon, MON_DATA_SPECIES) != SPECIES_NONE)
+    if (GetBoxMonData(&daycare->mons[0].mon, MON_DATA_SPECIES, NULL) != SPECIES_NONE)
     {
         DayCare_GetBoxMonNickname(&daycare->mons[0].mon, gStringVar1);
         GetBoxMonData(&daycare->mons[0].mon, MON_DATA_OT_NAME, text);
         StringCopy(gStringVar3, text);
     }
 
-    if (GetBoxMonData(&daycare->mons[1].mon, MON_DATA_SPECIES) != SPECIES_NONE)
+    if (GetBoxMonData(&daycare->mons[1].mon, MON_DATA_SPECIES, NULL) != SPECIES_NONE)
     {
         DayCare_GetBoxMonNickname(&daycare->mons[1].mon, gStringVar2);
     }
@@ -1276,7 +1276,7 @@ static void _GetDaycareMonNicknames(struct DayCare *daycare)
 u16 GetSelectedMonNicknameAndSpecies(void)
 {
     DayCare_GetBoxMonNickname(&gPlayerParty[GetCursorSelectionMonId()].box, gStringVar1);
-    return GetBoxMonData(&gPlayerParty[GetCursorSelectionMonId()].box, MON_DATA_SPECIES);
+    return GetBoxMonData(&gPlayerParty[GetCursorSelectionMonId()].box, MON_DATA_SPECIES, NULL);
 }
 
 void GetDaycareMonNicknames(void)
@@ -1340,9 +1340,9 @@ static u8 GetDaycareCompatibilityScore(struct DayCare *daycare)
     {
         u32 personality;
 
-        species[i] = GetBoxMonData(&daycare->mons[i].mon, MON_DATA_SPECIES);
-        trainerIds[i] = GetBoxMonData(&daycare->mons[i].mon, MON_DATA_OT_ID);
-        personality = GetBoxMonData(&daycare->mons[i].mon, MON_DATA_PERSONALITY);
+        species[i] = GetBoxMonData(&daycare->mons[i].mon, MON_DATA_SPECIES, NULL);
+        trainerIds[i] = GetBoxMonData(&daycare->mons[i].mon, MON_DATA_OT_ID, NULL);
+        personality = GetBoxMonData(&daycare->mons[i].mon, MON_DATA_PERSONALITY, NULL);
         genders[i] = GetGenderFromSpeciesAndPersonality(species[i], personality);
         eggGroups[i][0] = gSpeciesInfo[species[i]].eggGroups[0];
         eggGroups[i][1] = gSpeciesInfo[species[i]].eggGroups[1];
@@ -1631,7 +1631,7 @@ void GetCostToWithdrawRoute5DaycareMon(void)
 
 bool8 IsThereMonInRoute5Daycare(void)
 {
-    if (GetBoxMonData(&gSaveBlock1Ptr->route5DayCareMon.mon, MON_DATA_SPECIES) != SPECIES_NONE)
+    if (GetBoxMonData(&gSaveBlock1Ptr->route5DayCareMon.mon, MON_DATA_SPECIES, NULL) != SPECIES_NONE)
         return TRUE;
 
     return FALSE;
@@ -1656,21 +1656,21 @@ static void CreatedHatchedMon(struct Pokemon *egg, struct Pokemon *temp)
     u32 ivs[NUM_STATS];
 
 
-    species = GetMonData(egg, MON_DATA_SPECIES);
+    species = GetMonData(egg, MON_DATA_SPECIES, NULL);
 
     for (i = 0; i < MAX_MON_MOVES; i++)
-        moves[i] = GetMonData(egg, MON_DATA_MOVE1 + i);
+        moves[i] = GetMonData(egg, MON_DATA_MOVE1 + i, NULL);
 
-    personality = GetMonData(egg, MON_DATA_PERSONALITY);
+    personality = GetMonData(egg, MON_DATA_PERSONALITY, NULL);
 
     for (i = 0; i < NUM_STATS; i++)
-        ivs[i] = GetMonData(egg, MON_DATA_HP_IV + i);
+        ivs[i] = GetMonData(egg, MON_DATA_HP_IV + i, NULL);
 
-//    language = GetMonData(egg, MON_DATA_LANGUAGE);
-    gameMet = GetMonData(egg, MON_DATA_MET_GAME);
-    markings = GetMonData(egg, MON_DATA_MARKINGS);
-    pokerus = GetMonData(egg, MON_DATA_POKERUS);
-    isModernFatefulEncounter = GetMonData(egg, MON_DATA_MODERN_FATEFUL_ENCOUNTER);
+//    language = GetMonData(egg, MON_DATA_LANGUAGE, NULL);
+    gameMet = GetMonData(egg, MON_DATA_MET_GAME, NULL);
+    markings = GetMonData(egg, MON_DATA_MARKINGS, NULL);
+    pokerus = GetMonData(egg, MON_DATA_POKERUS, NULL);
+    isModernFatefulEncounter = GetMonData(egg, MON_DATA_MODERN_FATEFUL_ENCOUNTER, NULL);
 
     CreateMon(temp, species, EGG_HATCH_LEVEL, USE_RANDOM_IVS, TRUE, personality, OT_ID_PLAYER_ID, 0);
 
@@ -1706,7 +1706,7 @@ static void AddHatchedMonToParty(u8 id)
     CreatedHatchedMon(mon, &gEnemyParty[0]);
     SetMonData(mon, MON_DATA_IS_EGG, &isEgg);
 
-    pokeNum = GetMonData(mon, MON_DATA_SPECIES);
+    pokeNum = GetMonData(mon, MON_DATA_SPECIES, NULL);
     GetSpeciesName(name, pokeNum);
     SetMonData(mon, MON_DATA_NICKNAME, name);
 
@@ -1779,8 +1779,8 @@ static u8 EggHatchCreateMonSprite(u8 a0, u8 switchID, u8 pokeID, u16 *speciesLoc
     {
     case 0:
     {
-        u16 species = GetMonData(mon, MON_DATA_SPECIES);
-        u32 pid = GetMonData(mon, MON_DATA_PERSONALITY);
+        u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
+        u32 pid = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
         HandleLoadSpecialPokePic(&gMonFrontPicTable[species], gMonSpritesGfxPtr->sprites[(a0 * 2) + 1], species, pid);
         LoadCompressedSpritePalette(GetMonSpritePalStruct(mon));
         *speciesLoc = species;
@@ -2015,7 +2015,7 @@ static void CB2_EggHatch_1(void)
         {
         case 0:
             DayCare_GetMonNickname(&gPlayerParty[sEggHatchData->eggPartyID], gStringVar3);
-            species = GetMonData(&gPlayerParty[sEggHatchData->eggPartyID], MON_DATA_SPECIES);
+            species = GetMonData(&gPlayerParty[sEggHatchData->eggPartyID], MON_DATA_SPECIES, NULL);
             gender = GetMonGender(&gPlayerParty[sEggHatchData->eggPartyID]);
             personality = GetMonData(&gPlayerParty[sEggHatchData->eggPartyID], MON_DATA_PERSONALITY, 0);
             DoNamingScreen(NAMING_SCREEN_NICKNAME, gStringVar3, species, gender, personality, EggHatchSetMonNickname);
@@ -2102,7 +2102,7 @@ static void SpriteCB_Egg_2(struct Sprite* sprite)
 
             sprite->callback = SpriteCB_Egg_3;
             sprite->data[0] = 0;
-            species = GetMonData(&gPlayerParty[sEggHatchData->eggPartyID], MON_DATA_SPECIES);
+            species = GetMonData(&gPlayerParty[sEggHatchData->eggPartyID], MON_DATA_SPECIES, NULL);
             gSprites[sEggHatchData->pokeSpriteID].x2 = 0;
             gSprites[sEggHatchData->pokeSpriteID].y2 = gMonFrontPicCoords[species].y_offset;
         }
@@ -2216,7 +2216,7 @@ static u8 GetEggCyclesToSubtract(void)
     u8 count, i;
     for (count = CalculatePlayerPartyCount(), i = 0; i < count; i++)
     {
-        if (!GetMonData(&gPlayerParty[i], MON_DATA_SANITY_IS_EGG))
+        if (!GetMonData(&gPlayerParty[i], MON_DATA_SANITY_IS_EGG, NULL))
         {
             u8 ability = GetMonAbility(&gPlayerParty[i]);
             if (ability == ABILITY_MAGMA_ARMOR || ability == ABILITY_FLAME_BODY)

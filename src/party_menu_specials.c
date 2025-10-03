@@ -54,14 +54,14 @@ void GetNumMovesSelectedMonHas(void)
 
     gSpecialVar_Result = 0;
     for (i = 0; i < MAX_MON_MOVES; ++i)
-        if (GetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_MOVE1 + i) != MOVE_NONE)
+        if (GetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_MOVE1 + i, NULL) != MOVE_NONE)
             ++gSpecialVar_Result;
 }
 
 void BufferMoveDeleterNicknameAndMove(void)
 {
     struct Pokemon *mon = &gPlayerParty[gSpecialVar_0x8004];
-    u16 move = GetMonData(mon, MON_DATA_MOVE1 + gSpecialVar_0x8005);
+    u16 move = GetMonData(mon, MON_DATA_MOVE1 + gSpecialVar_0x8005, NULL);
 
     GetMonNickname(mon, gStringVar1);
     StringCopy(gStringVar2, gMoveNames[move]);
@@ -69,11 +69,11 @@ void BufferMoveDeleterNicknameAndMove(void)
 
 static void ShiftMoveSlot(struct Pokemon *mon, u8 slotTo, u8 slotFrom)
 {
-    u16 move1 = GetMonData(mon, MON_DATA_MOVE1 + slotTo);
-    u16 move0 = GetMonData(mon, MON_DATA_MOVE1 + slotFrom);
-    u8 pp1 = GetMonData(mon, MON_DATA_PP1 + slotTo);
-    u8 pp0 = GetMonData(mon, MON_DATA_PP1 + slotFrom);
-    u8 ppBonuses = GetMonData(mon, MON_DATA_PP_BONUSES);
+    u16 move1 = GetMonData(mon, MON_DATA_MOVE1 + slotTo, NULL);
+    u16 move0 = GetMonData(mon, MON_DATA_MOVE1 + slotFrom, NULL);
+    u8 pp1 = GetMonData(mon, MON_DATA_PP1 + slotTo, NULL);
+    u8 pp0 = GetMonData(mon, MON_DATA_PP1 + slotFrom, NULL);
+    u8 ppBonuses = GetMonData(mon, MON_DATA_PP_BONUSES, NULL);
     u8 ppBonusMask1 = gPPUpGetMask[slotTo];
     u8 ppBonusMove1 = (ppBonuses & ppBonusMask1) >> (slotTo * 2);
     u8 ppBonusMask2 = gPPUpGetMask[slotFrom];
@@ -101,7 +101,7 @@ void MoveDeleterForgetMove(void)
 
 void IsSelectedMonEgg(void)
 {
-    if (GetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_IS_EGG))
+    if (GetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_IS_EGG, NULL))
         gSpecialVar_Result = TRUE;
     else
         gSpecialVar_Result = FALSE;

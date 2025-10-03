@@ -796,10 +796,10 @@ void CheckPartyBattleTowerBanlist(void)
 
     for (i = 0; i < PARTY_SIZE; i++)
     {
-        species2 = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES_OR_EGG);
-        heldItem = GetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM);
-        level = GetMonData(&gPlayerParty[i], MON_DATA_LEVEL);
-        hp = GetMonData(&gPlayerParty[i], MON_DATA_HP);
+        species2 = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES_OR_EGG, NULL);
+        heldItem = GetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM, NULL);
+        level = GetMonData(&gPlayerParty[i], MON_DATA_LEVEL, NULL);
+        hp = GetMonData(&gPlayerParty[i], MON_DATA_HP, NULL);
 
         CheckMonBattleTowerBanlist(species2, heldItem, hp, gSpecialVar_Result, level, validPartySpecies, validPartyHeldItems, &counter);
     }
@@ -868,7 +868,7 @@ static void CB2_FinishEReaderBattle(void)
     case 1:
         for (i = 0; i < PARTY_SIZE; i++)
         {
-            heldItem = GetMonData(&gSaveBlock1Ptr->playerParty[i], MON_DATA_HELD_ITEM);
+            heldItem = GetMonData(&gSaveBlock1Ptr->playerParty[i], MON_DATA_HELD_ITEM, NULL);
             SetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM, &heldItem);
         }
         break;
@@ -915,7 +915,7 @@ void StartSpecialBattle(void)
     case 1: // secret base battle
         for (i = 0; i < PARTY_SIZE; i++)
         {
-            heldItem = GetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM);
+            heldItem = GetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM, NULL);
             SetMonData(&gSaveBlock1Ptr->playerParty[i], MON_DATA_HELD_ITEM, &heldItem);
         }
 
@@ -1277,7 +1277,7 @@ void AwardBattleTowerRibbons(void)
         {
             partyIndex = gSaveBlock2Ptr->battleTower.selectedPartyMons[i] - 1;
             pokemon = &gPlayerParty[partyIndex];
-            if (!GetMonData(pokemon, ribbonType))
+            if (!GetMonData(pokemon, ribbonType, NULL))
             {
                 gSpecialVar_Result = 1;
                 SetMonData(pokemon, ribbonType, &gSpecialVar_Result);

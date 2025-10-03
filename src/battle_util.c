@@ -1559,9 +1559,9 @@ bool8 HasNoMonsToSwitch(u8 battler, u8 partyIdBattlerOn1, u8 partyIdBattlerOn2)
         playerId = GetLinkTrainerFlankId(flankId);
         for (i = playerId * MULTI_PARTY_SIZE; i < playerId * MULTI_PARTY_SIZE + MULTI_PARTY_SIZE; i++)
         {
-            if (GetMonData(&party[i], MON_DATA_HP) != 0
-             && GetMonData(&party[i], MON_DATA_SPECIES_OR_EGG) != SPECIES_NONE
-             && GetMonData(&party[i], MON_DATA_SPECIES_OR_EGG) != SPECIES_EGG)
+            if (GetMonData(&party[i], MON_DATA_HP, NULL) != 0
+             && GetMonData(&party[i], MON_DATA_SPECIES_OR_EGG, NULL) != SPECIES_NONE
+             && GetMonData(&party[i], MON_DATA_SPECIES_OR_EGG, NULL) != SPECIES_EGG)
                 break;
         }
         return (i == playerId * MULTI_PARTY_SIZE + MULTI_PARTY_SIZE);
@@ -1588,9 +1588,9 @@ bool8 HasNoMonsToSwitch(u8 battler, u8 partyIdBattlerOn1, u8 partyIdBattlerOn2)
 
         for (i = 0; i < PARTY_SIZE; i++)
         {
-            if (GetMonData(&party[i], MON_DATA_HP) != 0
-             && GetMonData(&party[i], MON_DATA_SPECIES_OR_EGG) != SPECIES_NONE
-             && GetMonData(&party[i], MON_DATA_SPECIES_OR_EGG) != SPECIES_EGG
+            if (GetMonData(&party[i], MON_DATA_HP, NULL) != 0
+             && GetMonData(&party[i], MON_DATA_SPECIES_OR_EGG, NULL) != SPECIES_NONE
+             && GetMonData(&party[i], MON_DATA_SPECIES_OR_EGG, NULL) != SPECIES_EGG
              && i != partyIdBattlerOn1 && i != partyIdBattlerOn2
              && i != *(gBattleStruct->monToSwitchIntoId + flankId) && i != playerId[gBattleStruct->monToSwitchIntoId])
                 break;
@@ -1669,11 +1669,11 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u8 ability, u8 special, u16 moveA
     else
         pokeDef = &gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]];
 
-    speciesAtk = GetMonData(pokeAtk, MON_DATA_SPECIES);
-    pidAtk = GetMonData(pokeAtk, MON_DATA_PERSONALITY);
+    speciesAtk = GetMonData(pokeAtk, MON_DATA_SPECIES, NULL);
+    pidAtk = GetMonData(pokeAtk, MON_DATA_PERSONALITY, NULL);
 
-    speciesDef = GetMonData(pokeDef, MON_DATA_SPECIES);
-    pidDef = GetMonData(pokeDef, MON_DATA_PERSONALITY);
+    speciesDef = GetMonData(pokeDef, MON_DATA_SPECIES, NULL);
+    pidDef = GetMonData(pokeDef, MON_DATA_PERSONALITY, NULL);
 
     if (!(gBattleTypeFlags & BATTLE_TYPE_SAFARI)) // Why isn't that check done at the beginning?
     {
@@ -2593,9 +2593,9 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
                         mon = &gEnemyParty[gBattlerPartyIndexes[battlerId]];
                     for (i = 0; i < MAX_MON_MOVES; i++)
                     {
-                        move = GetMonData(mon, MON_DATA_MOVE1 + i);
-                        changedPP = GetMonData(mon, MON_DATA_PP1 + i);
-                        ppBonuses = GetMonData(mon, MON_DATA_PP_BONUSES);
+                        move = GetMonData(mon, MON_DATA_MOVE1 + i, NULL);
+                        changedPP = GetMonData(mon, MON_DATA_PP1 + i, NULL);
+                        ppBonuses = GetMonData(mon, MON_DATA_PP_BONUSES, NULL);
                         if (move && changedPP == 0)
                             break;
                     }

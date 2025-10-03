@@ -77,9 +77,9 @@ static struct PokemonSpecialAnim * AllocPSA(u8 slotId, u16 itemId, MainCallback 
     pokemon = &gPlayerParty[slotId];
     ptr->state = 0;
     ptr->savedCallback = callback;
-    ptr->species = GetMonData(pokemon, MON_DATA_SPECIES);
-    ptr->closeness = GetClosenessFromFriendship(GetMonData(pokemon, MON_DATA_FRIENDSHIP));
-    ptr->personality = GetMonData(pokemon, MON_DATA_PERSONALITY);
+    ptr->species = GetMonData(pokemon, MON_DATA_SPECIES, NULL);
+    ptr->closeness = GetClosenessFromFriendship(GetMonData(pokemon, MON_DATA_FRIENDSHIP, NULL));
+    ptr->personality = GetMonData(pokemon, MON_DATA_PERSONALITY, NULL);
     ptr->slotId = slotId;
     ptr->itemId = itemId;
     ptr->animType = GetAnimTypeByItemId(itemId);
@@ -694,12 +694,12 @@ u32 PSA_GetMonPersonality(void)
 
 void GetMonLevelUpWindowStats(struct Pokemon * pokemon, u16 *data)
 {
-    data[0] = GetMonData(pokemon, MON_DATA_MAX_HP);
-    data[1] = GetMonData(pokemon, MON_DATA_ATK);
-    data[2] = GetMonData(pokemon, MON_DATA_DEF);
-    data[3] = GetMonData(pokemon, MON_DATA_SPEED);
-    data[4] = GetMonData(pokemon, MON_DATA_SPATK);
-    data[5] = GetMonData(pokemon, MON_DATA_SPDEF);
+    data[0] = GetMonData(pokemon, MON_DATA_MAX_HP, NULL);
+    data[1] = GetMonData(pokemon, MON_DATA_ATK, NULL);
+    data[2] = GetMonData(pokemon, MON_DATA_DEF, NULL);
+    data[3] = GetMonData(pokemon, MON_DATA_SPEED, NULL);
+    data[4] = GetMonData(pokemon, MON_DATA_SPATK, NULL);
+    data[5] = GetMonData(pokemon, MON_DATA_SPDEF, NULL);
 }
 
 bool32 PSA_IsCancelDisabled(void)

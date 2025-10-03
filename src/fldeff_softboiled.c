@@ -15,8 +15,8 @@ extern const u8 gText_PkmnHPRestoredByVar2[];
 
 bool8 SetUpFieldMove_SoftBoiled(void)
 {
-    u16 maxHp = GetMonData(&gPlayerParty[GetCursorSelectionMonId()], MON_DATA_MAX_HP);
-    u16 curHp = GetMonData(&gPlayerParty[GetCursorSelectionMonId()], MON_DATA_HP);
+    u16 maxHp = GetMonData(&gPlayerParty[GetCursorSelectionMonId()], MON_DATA_MAX_HP, NULL);
+    u16 curHp = GetMonData(&gPlayerParty[GetCursorSelectionMonId()], MON_DATA_HP, NULL);
 
     if (curHp > maxHp / 5)
         return TRUE;
@@ -47,15 +47,15 @@ void Task_TryUseSoftboiledOnPartyMon(u8 taskId)
     }
     else
     {
-        curHp = GetMonData(&gPlayerParty[recipientPartyId], MON_DATA_HP);
+        curHp = GetMonData(&gPlayerParty[recipientPartyId], MON_DATA_HP, NULL);
         if (curHp == 0
             || userPartyId == recipientPartyId
-            || GetMonData(&gPlayerParty[recipientPartyId], MON_DATA_MAX_HP) == curHp)
+            || GetMonData(&gPlayerParty[recipientPartyId], MON_DATA_MAX_HP, NULL) == curHp)
             CantUseSoftboiledOnMon(taskId);
         else
         {
             PlaySE(SE_USE_ITEM);
-            PartyMenuModifyHP(taskId, userPartyId, -1, GetMonData(&gPlayerParty[userPartyId], MON_DATA_MAX_HP) / 5, Task_SoftboiledRestoreHealth);
+            PartyMenuModifyHP(taskId, userPartyId, -1, GetMonData(&gPlayerParty[userPartyId], MON_DATA_MAX_HP, NULL) / 5, Task_SoftboiledRestoreHealth);
         }
     }
 }
@@ -63,7 +63,7 @@ void Task_TryUseSoftboiledOnPartyMon(u8 taskId)
 static void Task_SoftboiledRestoreHealth(u8 taskId)
 {
     PlaySE(SE_USE_ITEM);
-    PartyMenuModifyHP(taskId, gPartyMenu.slotId2, 1, GetMonData(&gPlayerParty[gPartyMenu.slotId], MON_DATA_MAX_HP) / 5, Task_DisplayHPRestoredMessage);
+    PartyMenuModifyHP(taskId, gPartyMenu.slotId2, 1, GetMonData(&gPlayerParty[gPartyMenu.slotId], MON_DATA_MAX_HP, NULL) / 5, Task_DisplayHPRestoredMessage);
 }
 
 static void Task_DisplayHPRestoredMessage(u8 taskId)

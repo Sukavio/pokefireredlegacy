@@ -32,9 +32,9 @@ bool8 EnterHallOfFame(void)
     gaveAtLeastOneRibbon = FALSE;
     for (i = 0, r7 = &ribbonState; i < PARTY_SIZE; i++)
     {
-        if (GetMonData(&gPlayerParty[i], MON_DATA_SANITY_HAS_SPECIES) && !GetMonData(&gPlayerParty[i], MON_DATA_SANITY_IS_EGG))
+        if (GetMonData(&gPlayerParty[i], MON_DATA_SANITY_HAS_SPECIES, NULL) && !GetMonData(&gPlayerParty[i], MON_DATA_SANITY_IS_EGG, NULL))
         {
-            if (!GetMonData(&gPlayerParty[i], MON_DATA_CHAMPION_RIBBON))
+            if (!GetMonData(&gPlayerParty[i], MON_DATA_CHAMPION_RIBBON, NULL))
             {
                 *r7 = TRUE;
                 SetMonData(&gPlayerParty[i], MON_DATA_CHAMPION_RIBBON, &ribbonState);

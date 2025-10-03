@@ -498,7 +498,7 @@ static void STWI_intr_timer(void)
         STWI_stop_timer();
         STWI_reset_ClockCounter();
         if (gSTWIStatus->callbackM != NULL)
-            gSTWIStatus->callbackM(ID_CLOCK_SLAVE_MS_CHANGE_ERROR_BY_DMA_REQ, 0);
+            gSTWIStatus->callbackM(ID_CLOCK_SLAVE_MS_CHANGE_ERROR_BY_DMA_REQ, 0, NULL);
         break;
     }
 }
@@ -549,7 +549,7 @@ static u16 STWI_init(u8 request)
         // Can't start sending if IME is disabled.
         gSTWIStatus->error = ERR_REQ_CMD_IME_DISABLE;
         if (gSTWIStatus->callbackM != NULL)
-            gSTWIStatus->callbackM(request, gSTWIStatus->error);
+            gSTWIStatus->callbackM(request, gSTWIStatus->error, NULL);
         return TRUE;
     }
     else if (gSTWIStatus->sending == 1)
@@ -558,7 +558,7 @@ static u16 STWI_init(u8 request)
         gSTWIStatus->error = ERR_REQ_CMD_SENDING;
         gSTWIStatus->sending = 0;
         if (gSTWIStatus->callbackM != NULL)
-            gSTWIStatus->callbackM(request, gSTWIStatus->error);
+            gSTWIStatus->callbackM(request, gSTWIStatus->error, NULL);
         return TRUE;
     }
     else if (gSTWIStatus->msMode == AGB_CLK_SLAVE)
@@ -623,14 +623,14 @@ static s32 STWI_restart_Command(void)
             gSTWIStatus->error = ERR_REQ_CMD_CLOCK_DRIFT;
             gSTWIStatus->sending = 0;
             if (gSTWIStatus->callbackM != NULL)
-                gSTWIStatus->callbackM(gSTWIStatus->reqActiveCommand, gSTWIStatus->error);
+                gSTWIStatus->callbackM(gSTWIStatus->reqActiveCommand, gSTWIStatus->error, NULL);
         }
         else
         {
             gSTWIStatus->error = ERR_REQ_CMD_CLOCK_DRIFT;
             gSTWIStatus->sending = 0;
             if (gSTWIStatus->callbackM != NULL)
-                gSTWIStatus->callbackM(gSTWIStatus->reqActiveCommand, gSTWIStatus->error);
+                gSTWIStatus->callbackM(gSTWIStatus->reqActiveCommand, gSTWIStatus->error, NULL);
             gSTWIStatus->state = 4; // error
         }
     }

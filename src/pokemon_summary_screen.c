@@ -1039,8 +1039,8 @@ void ShowPokemonSummaryScreen(struct Pokemon * party, u8 cursorPos, u8 lastIdx, 
     sMonSummaryScreen->unk322C = 1;
 
     BufferSelectedMonData(&sMonSummaryScreen->currentMon);
-    sMonSummaryScreen->isEgg = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_IS_EGG);
-    sMonSummaryScreen->isBadEgg = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SANITY_IS_BAD_EGG);
+    sMonSummaryScreen->isEgg = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_IS_EGG, NULL);
+    sMonSummaryScreen->isBadEgg = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SANITY_IS_BAD_EGG, NULL);
 
     if (sMonSummaryScreen->isBadEgg == TRUE)
         sMonSummaryScreen->isEgg = TRUE;
@@ -2087,7 +2087,7 @@ static void BufferMonInfo(void)
     u16 heldItem;
     u32 otId;
 
-    dexNum = SpeciesToPokedexNum(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES));
+    dexNum = SpeciesToPokedexNum(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES, NULL));
     if (dexNum == 0xffff)
         StringCopy(sMonSummaryScreen->summary.dexNumStrBuf, gText_PokeSum_DexNoUnknown);
     else
@@ -2097,7 +2097,7 @@ static void BufferMonInfo(void)
 
     if (!sMonSummaryScreen->isEgg)
     {
-        dexNum = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES);
+        dexNum = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES, NULL);
         GetSpeciesName(sMonSummaryScreen->summary.speciesNameStrBuf, dexNum);
     }
     else
@@ -2114,7 +2114,7 @@ static void BufferMonInfo(void)
     StringGet_Nickname(sMonSummaryScreen->summary.nicknameStrBuf);
 
     gender = GetMonGender(&sMonSummaryScreen->currentMon);
-    dexNum = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES_OR_EGG);
+    dexNum = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES_OR_EGG, NULL);
 
     if (gender == MON_FEMALE)
         StringCopy(sMonSummaryScreen->summary.genderSymbolStrBuf, gText_FemaleSymbol);
@@ -2130,16 +2130,16 @@ static void BufferMonInfo(void)
     GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_OT_NAME, tempStr);
     StringCopyN_Multibyte(sMonSummaryScreen->summary.otNameStrBuf, tempStr, PLAYER_NAME_LENGTH);
 
-    ConvertInternationalString(sMonSummaryScreen->summary.otNameStrBuf, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_LANGUAGE));
+    ConvertInternationalString(sMonSummaryScreen->summary.otNameStrBuf, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_LANGUAGE, NULL));
 
-    otId = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_OT_ID) & 0xffff;
+    otId = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_OT_ID, NULL) & 0xffff;
     ConvertIntToDecimalStringN(sMonSummaryScreen->summary.unk306C, otId, STR_CONV_MODE_LEADING_ZEROS, 5);
 
-    ConvertIntToDecimalStringN(tempStr, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_LEVEL), STR_CONV_MODE_LEFT_ALIGN, 3);
+    ConvertIntToDecimalStringN(tempStr, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_LEVEL, NULL), STR_CONV_MODE_LEFT_ALIGN, 3);
     StringCopy(sMonSummaryScreen->summary.levelStrBuf, gText_Lv);
     StringAppendN(sMonSummaryScreen->summary.levelStrBuf, tempStr, 4);
 
-    heldItem = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HELD_ITEM);
+    heldItem = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HELD_ITEM, NULL);
 
     if (heldItem == ITEM_NONE)
         StringCopy(sMonSummaryScreen->summary.itemNameStrBuf, gText_PokeSum_Item_None);
@@ -2237,11 +2237,11 @@ static void BufferMonSkills(void)
     }
 
 
-    hp = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP);
+    hp = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP, NULL);
     ConvertIntToDecimalStringN(sMonSummaryScreen->summary.curHpStrBuf, hp, STR_CONV_MODE_LEFT_ALIGN, 3);
     StringAppend(sMonSummaryScreen->summary.curHpStrBuf, gText_Slash);
 
-    hp = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MAX_HP);
+    hp = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MAX_HP, NULL);
     ConvertIntToDecimalStringN(tempStr, hp, STR_CONV_MODE_LEFT_ALIGN, 3);
     StringAppend(sMonSummaryScreen->summary.curHpStrBuf, tempStr);
 
@@ -2249,7 +2249,7 @@ static void BufferMonSkills(void)
 
     if (sMonSummaryScreen->savedCallback == CB2_ReturnToTradeMenuFromSummary && sMonSummaryScreen->isEnemyParty == TRUE)
     {
-        statValue = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ATK2);
+        statValue = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ATK2, NULL);
         ConvertIntToDecimalStringN(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_ATK], statValue, STR_CONV_MODE_RIGHT_ALIGN, 4);
         if(plusStat == 1)
             sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_ATK][0] = 0x79;
@@ -2259,7 +2259,7 @@ static void BufferMonSkills(void)
             sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_ATK][0] = 0x78;
         sMonSkillsPrinterXpos->atkStr = GetNumberRightAlign27(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_ATK]);
 
-        statValue = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_DEF2);
+        statValue = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_DEF2, NULL);
         ConvertIntToDecimalStringN(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_DEF], statValue, STR_CONV_MODE_RIGHT_ALIGN, 4);
         if(plusStat == 2)
             sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_DEF][0] = 0x79;
@@ -2269,7 +2269,7 @@ static void BufferMonSkills(void)
             sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_DEF][0] = 0x78;
         sMonSkillsPrinterXpos->defStr = GetNumberRightAlign27(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_DEF]);
 
-        statValue = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPATK2);
+        statValue = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPATK2, NULL);
         ConvertIntToDecimalStringN(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPA], statValue, STR_CONV_MODE_RIGHT_ALIGN, 4);
         if(plusStat == 4)
             sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPA][0] = 0x79;
@@ -2279,7 +2279,7 @@ static void BufferMonSkills(void)
             sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPA][0] = 0x78;
         sMonSkillsPrinterXpos->spAStr = GetNumberRightAlign27(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPA]);
 
-        statValue = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPDEF2);
+        statValue = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPDEF2, NULL);
         ConvertIntToDecimalStringN(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPD], statValue, STR_CONV_MODE_RIGHT_ALIGN, 4);
         if(plusStat == 5)
             sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPD][0] = 0x79;
@@ -2289,7 +2289,7 @@ static void BufferMonSkills(void)
             sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPD][0] = 0x78;
         sMonSkillsPrinterXpos->spDStr = GetNumberRightAlign27(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPD]);
 
-        statValue = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPEED2);
+        statValue = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPEED2, NULL);
         ConvertIntToDecimalStringN(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPE], statValue, STR_CONV_MODE_RIGHT_ALIGN, 4);
         if(plusStat == 3)
             sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPE][0] = 0x79;
@@ -2301,7 +2301,7 @@ static void BufferMonSkills(void)
     }
     else
     {
-        statValue = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ATK);
+        statValue = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ATK, NULL);
         ConvertIntToDecimalStringN(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_ATK], statValue, STR_CONV_MODE_RIGHT_ALIGN, 4);
         if(plusStat == 1)
             sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_ATK][0] = 0x79;
@@ -2311,7 +2311,7 @@ static void BufferMonSkills(void)
             sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_ATK][0] = 0x78;
         sMonSkillsPrinterXpos->atkStr = GetNumberRightAlign27(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_ATK]);
 
-        statValue = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_DEF);
+        statValue = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_DEF, NULL);
         ConvertIntToDecimalStringN(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_DEF], statValue, STR_CONV_MODE_RIGHT_ALIGN, 4);
         if(plusStat == 2)
             sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_DEF][0] = 0x79;
@@ -2321,7 +2321,7 @@ static void BufferMonSkills(void)
             sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_DEF][0] = 0x78;
         sMonSkillsPrinterXpos->defStr = GetNumberRightAlign27(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_DEF]);
 
-        statValue = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPATK);
+        statValue = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPATK, NULL);
         ConvertIntToDecimalStringN(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPA], statValue, STR_CONV_MODE_RIGHT_ALIGN, 4);
         if(plusStat == 4)
             sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPA][0] = 0x79;
@@ -2331,7 +2331,7 @@ static void BufferMonSkills(void)
             sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPA][0] = 0x78;
         sMonSkillsPrinterXpos->spAStr = GetNumberRightAlign27(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPA]);
 
-        statValue = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPDEF);
+        statValue = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPDEF, NULL);
         ConvertIntToDecimalStringN(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPD], statValue, STR_CONV_MODE_RIGHT_ALIGN, 4);
         if(plusStat == 5)
             sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPD][0] = 0x79;
@@ -2341,7 +2341,7 @@ static void BufferMonSkills(void)
             sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPD][0] = 0x78;
         sMonSkillsPrinterXpos->spDStr = GetNumberRightAlign27(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPD]);
 
-        statValue = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPEED);
+        statValue = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPEED, NULL);
         ConvertIntToDecimalStringN(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPE], statValue, STR_CONV_MODE_RIGHT_ALIGN, 4);
         if(plusStat == 3)
             sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPE][0] = 0x79;
@@ -2352,26 +2352,26 @@ static void BufferMonSkills(void)
         sMonSkillsPrinterXpos->speStr = GetNumberRightAlign27(sMonSummaryScreen->summary.statValueStrBufs[PSS_STAT_SPE]);
     }
 
-    exp = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_EXP);
+    exp = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_EXP, NULL);
     ConvertIntToDecimalStringN(sMonSummaryScreen->summary.expPointsStrBuf, exp, STR_CONV_MODE_LEFT_ALIGN, 7);
     sMonSkillsPrinterXpos->expStr = GetNumberRightAlign63(sMonSummaryScreen->summary.expPointsStrBuf);
 
-    level = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_LEVEL);
+    level = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_LEVEL, NULL);
     expToNextLevel = 0;
     if (level < 100 && !levelCappedNuzlocke(level))
     {
-        species = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES);
+        species = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES, NULL);
         expToNextLevel = gExperienceTables[gSpeciesInfo[species].growthRate][level + 1] - exp;
     }
 
     ConvertIntToDecimalStringN(sMonSummaryScreen->summary.expToNextLevelStrBuf, expToNextLevel, STR_CONV_MODE_LEFT_ALIGN, 7);
     sMonSkillsPrinterXpos->toNextLevel = GetNumberRightAlign63(sMonSummaryScreen->summary.expToNextLevelStrBuf);
 
-    type = GetAbilityBySpecies(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES), GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM));
+    type = GetAbilityBySpecies(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES, NULL), GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM, NULL));
     StringCopy(sMonSummaryScreen->summary.abilityNameStrBuf, gAbilityNames[type]);
     StringCopy(sMonSummaryScreen->summary.abilityDescStrBuf, gAbilityDescriptionPointers[type]);
 
-    sMonSummaryScreen->curMonStatusAilment = StatusToAilment(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_STATUS));
+    sMonSummaryScreen->curMonStatusAilment = StatusToAilment(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_STATUS, NULL));
     if (sMonSummaryScreen->curMonStatusAilment == AILMENT_NONE)
         if (CheckPartyPokerus(&sMonSummaryScreen->currentMon, 0))
             sMonSummaryScreen->curMonStatusAilment = AILMENT_PKRS;
@@ -2422,7 +2422,7 @@ static void BufferMonMoveI(u8 i)
         ConvertIntToDecimalStringN(sMonSummaryScreen->summary.moveCurPpStrBufs[i],
                                    GetMonPpByMoveSlot(&sMonSummaryScreen->currentMon, i), STR_CONV_MODE_LEFT_ALIGN, 3);
         ConvertIntToDecimalStringN(sMonSummaryScreen->summary.moveMaxPpStrBufs[i],
-                                   CalculatePPWithBonus(sMonSummaryScreen->moveIds[i], GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PP_BONUSES), i),
+                                   CalculatePPWithBonus(sMonSummaryScreen->moveIds[i], GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PP_BONUSES, NULL), i),
                                    STR_CONV_MODE_LEFT_ALIGN, 3);
     }
 
@@ -2616,7 +2616,7 @@ static void PrintInfoPage(void)
         u8 eggCycles;
         u8 hatchMsgIndex;
 
-        eggCycles = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_FRIENDSHIP);
+        eggCycles = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_FRIENDSHIP, NULL);
 
         if (eggCycles <= 5)
             hatchMsgIndex = 3;
@@ -2672,7 +2672,7 @@ static void PokeSum_PrintMoveName(u8 i)
     u8 colorIdx = 0;
     u8 curPP = GetMonPpByMoveSlot(&sMonSummaryScreen->currentMon, i);
     u16 move = sMonSummaryScreen->moveIds[i];
-    u8 ppBonuses = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PP_BONUSES);
+    u8 ppBonuses = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PP_BONUSES, NULL);
     u8 maxPP = CalculatePPWithBonus(move, ppBonuses, i);
 
     if (i == 4)
@@ -2757,7 +2757,7 @@ static void PokeSum_PrintTrainerMemo_Mon_HeldByOT(void)
     DynamicPlaceholderTextUtil_Reset();
     nature = GetNature(&sMonSummaryScreen->currentMon);
     DynamicPlaceholderTextUtil_SetPlaceholderPtr(0, gNatureNamePointers[nature]);
-    level = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MET_LEVEL);
+    level = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MET_LEVEL, NULL);
 
     if (level == 0)
         level = 5;
@@ -2765,7 +2765,7 @@ static void PokeSum_PrintTrainerMemo_Mon_HeldByOT(void)
     ConvertIntToDecimalStringN(levelStr, level, STR_CONV_MODE_LEFT_ALIGN, 3);
     DynamicPlaceholderTextUtil_SetPlaceholderPtr(1, levelStr);
 
-    metLocation = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MET_LOCATION);
+    metLocation = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MET_LOCATION, NULL);
 
     if (MapSecIsInKantoOrSevii(metLocation) == TRUE)
         GetMapNameGeneric_(mapNameStr, metLocation);
@@ -2781,9 +2781,9 @@ static void PokeSum_PrintTrainerMemo_Mon_HeldByOT(void)
 
     // These pairs of strings are bytewise identical to each other in English,
     // but Japanese uses different grammar for Bold and Gentle natures.
-    if (GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MET_LEVEL) == 0) // Hatched
+    if (GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MET_LEVEL, NULL) == 0) // Hatched
     {
-        if (GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MODERN_FATEFUL_ENCOUNTER) == TRUE)
+        if (GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MODERN_FATEFUL_ENCOUNTER, NULL) == TRUE)
         {
             if (PokeSum_IsMonBoldOrGentle(nature))
                 DynamicPlaceholderTextUtil_ExpandPlaceholders(natureMetOrHatchedAtLevelStr, gText_PokeSum_FatefulEncounterHatched_BoldGentleGrammar);
@@ -2832,7 +2832,7 @@ static void PokeSum_PrintTrainerMemo_Mon_NotHeldByOT(void)
     nature = GetNature(&sMonSummaryScreen->currentMon);
     DynamicPlaceholderTextUtil_SetPlaceholderPtr(0, gNatureNamePointers[nature]);
 
-    level = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MET_LEVEL);
+    level = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MET_LEVEL, NULL);
 
     if (level == 0)
         level = 5;
@@ -2840,7 +2840,7 @@ static void PokeSum_PrintTrainerMemo_Mon_NotHeldByOT(void)
     ConvertIntToDecimalStringN(levelStr, level, STR_CONV_MODE_LEFT_ALIGN, 3);
     DynamicPlaceholderTextUtil_SetPlaceholderPtr(1, levelStr);
 
-    metLocation = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MET_LOCATION);
+    metLocation = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MET_LOCATION, NULL);
 
     if (!MapSecIsInKantoOrSevii(metLocation) || !CurrentMonIsFromGBA())
     {
@@ -2878,9 +2878,9 @@ static void PokeSum_PrintTrainerMemo_Mon_NotHeldByOT(void)
 
     // These pairs of strings are bytewise identical to each other in English,
     // but Japanese uses different grammar for Bold and Gentle natures.
-    if (GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MET_LEVEL) == 0) // hatched from an EGG
+    if (GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MET_LEVEL, NULL) == 0) // hatched from an EGG
     {
-        if (GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MODERN_FATEFUL_ENCOUNTER) == TRUE)
+        if (GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MODERN_FATEFUL_ENCOUNTER, NULL) == TRUE)
         {
             if (PokeSum_IsMonBoldOrGentle(nature))
                 DynamicPlaceholderTextUtil_ExpandPlaceholders(natureMetOrHatchedAtLevelStr, gText_PokeSum_ApparentlyFatefulEncounterHatched_BoldGentleGrammar);
@@ -2930,15 +2930,15 @@ static void PokeSum_PrintTrainerMemo_Egg(void)
     u8 version;
     u8 chosenStrIndex = 0;
 
-    metLocation = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MET_LOCATION);
+    metLocation = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MET_LOCATION, NULL);
 
     if (sMonSummaryScreen->monList.mons != gEnemyParty)
     {
-        if (metLocation == METLOC_FATEFUL_ENCOUNTER || GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MODERN_FATEFUL_ENCOUNTER) == TRUE)
+        if (metLocation == METLOC_FATEFUL_ENCOUNTER || GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MODERN_FATEFUL_ENCOUNTER, NULL) == TRUE)
             chosenStrIndex = 4;
         else
         {
-            version = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MET_GAME);
+            version = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MET_GAME, NULL);
 
             if (version != VERSION_LEAF_GREEN && version != VERSION_FIRE_RED)
                 chosenStrIndex = 1;
@@ -2952,11 +2952,11 @@ static void PokeSum_PrintTrainerMemo_Egg(void)
     }
     else
     {
-        if (metLocation == METLOC_FATEFUL_ENCOUNTER || GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MODERN_FATEFUL_ENCOUNTER) == TRUE)
+        if (metLocation == METLOC_FATEFUL_ENCOUNTER || GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MODERN_FATEFUL_ENCOUNTER, NULL) == TRUE)
             chosenStrIndex = 4;
         else
         {
-            version = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MET_GAME);
+            version = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MET_GAME, NULL);
 
             if (version != VERSION_LEAF_GREEN && version != VERSION_FIRE_RED)
             {
@@ -3396,7 +3396,7 @@ static u8 PokeSum_BufferOtName_IsEqualToCurrentOwner(struct Pokemon * mon)
         StringCopy(sMonSummaryScreen->summary.otNameStrBufs[0], gSaveBlock2Ptr->playerName);
     }
 
-    if (trainerId != (GetMonData(mon, MON_DATA_OT_ID) & 0xffff))
+    if (trainerId != (GetMonData(mon, MON_DATA_OT_ID, NULL) & 0xffff))
         return FALSE;
 
     GetMonData(mon, MON_DATA_OT_NAME, sMonSummaryScreen->summary.otNameStrBufs[1]);
@@ -3569,16 +3569,16 @@ static u16 GetMonMoveBySlotId(struct Pokemon * mon, u8 moveSlot)
     switch (moveSlot)
     {
     case 0:
-        move = GetMonData(mon, MON_DATA_MOVE1);
+        move = GetMonData(mon, MON_DATA_MOVE1, NULL);
         break;
     case 1:
-        move = GetMonData(mon, MON_DATA_MOVE2);
+        move = GetMonData(mon, MON_DATA_MOVE2, NULL);
         break;
     case 2:
-        move = GetMonData(mon, MON_DATA_MOVE3);
+        move = GetMonData(mon, MON_DATA_MOVE3, NULL);
         break;
     default:
-        move = GetMonData(mon, MON_DATA_MOVE4);
+        move = GetMonData(mon, MON_DATA_MOVE4, NULL);
     }
 
     return move;
@@ -3591,23 +3591,23 @@ static u16 GetMonPpByMoveSlot(struct Pokemon * mon, u8 moveSlot)
     switch (moveSlot)
     {
     case 0:
-        pp = GetMonData(mon, MON_DATA_PP1);
+        pp = GetMonData(mon, MON_DATA_PP1, NULL);
         break;
     case 1:
-        pp = GetMonData(mon, MON_DATA_PP2);
+        pp = GetMonData(mon, MON_DATA_PP2, NULL);
         break;
     case 2:
-        pp = GetMonData(mon, MON_DATA_PP3);
+        pp = GetMonData(mon, MON_DATA_PP3, NULL);
         break;
     default:
-        pp = GetMonData(mon, MON_DATA_PP4);
+        pp = GetMonData(mon, MON_DATA_PP4, NULL);
     }
     return pp;
 }
 
 static u8 StatusToAilment(u32 status)
 {
-    if (GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP) == 0)
+    if (GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP, NULL) == 0)
         return AILMENT_FNT;
 
     if ((status & STATUS1_PSN_ANY) != 0)
@@ -3828,13 +3828,13 @@ static void SwapMonMoveSlots(void)
     partyMons = sMonSummaryScreen->monList.mons;
     mon = &partyMons[GetLastViewedMonIndex()];
 
-    move1 = GetMonData(mon, MON_DATA_MOVE1 + sMoveSelectionCursorPos);
-    move2 = GetMonData(mon, MON_DATA_MOVE1 + sMoveSwapCursorPos);
+    move1 = GetMonData(mon, MON_DATA_MOVE1 + sMoveSelectionCursorPos, NULL);
+    move2 = GetMonData(mon, MON_DATA_MOVE1 + sMoveSwapCursorPos, NULL);
 
-    pp1 = GetMonData(mon, MON_DATA_PP1 + sMoveSelectionCursorPos);
-    pp2 = GetMonData(mon, MON_DATA_PP1 + sMoveSwapCursorPos);
+    pp1 = GetMonData(mon, MON_DATA_PP1 + sMoveSelectionCursorPos, NULL);
+    pp2 = GetMonData(mon, MON_DATA_PP1 + sMoveSwapCursorPos, NULL);
 
-    allMovesPPBonuses = GetMonData(mon, MON_DATA_PP_BONUSES);
+    allMovesPPBonuses = GetMonData(mon, MON_DATA_PP_BONUSES, NULL);
 
     move1ppBonus = (allMovesPPBonuses & gPPUpGetMask[sMoveSelectionCursorPos]) >> (sMoveSelectionCursorPos * 2);
     move2ppBonus = (allMovesPPBonuses & gPPUpGetMask[sMoveSwapCursorPos]) >> (sMoveSwapCursorPos * 2);
@@ -3863,13 +3863,13 @@ static void SwapBoxMonMoveSlots(void)
     boxMons = sMonSummaryScreen->monList.boxMons;
     boxMon = &boxMons[GetLastViewedMonIndex()];
 
-    move1 = GetBoxMonData(boxMon, MON_DATA_MOVE1 + sMoveSelectionCursorPos);
-    move2 = GetBoxMonData(boxMon, MON_DATA_MOVE1 + sMoveSwapCursorPos);
+    move1 = GetBoxMonData(boxMon, MON_DATA_MOVE1 + sMoveSelectionCursorPos, NULL);
+    move2 = GetBoxMonData(boxMon, MON_DATA_MOVE1 + sMoveSwapCursorPos, NULL);
 
-    pp1 = GetBoxMonData(boxMon, MON_DATA_PP1 + sMoveSelectionCursorPos);
-    pp2 = GetBoxMonData(boxMon, MON_DATA_PP1 + sMoveSwapCursorPos);
+    pp1 = GetBoxMonData(boxMon, MON_DATA_PP1 + sMoveSelectionCursorPos, NULL);
+    pp2 = GetBoxMonData(boxMon, MON_DATA_PP1 + sMoveSwapCursorPos, NULL);
 
-    allMovesPPBonuses = GetBoxMonData(boxMon, MON_DATA_PP_BONUSES);
+    allMovesPPBonuses = GetBoxMonData(boxMon, MON_DATA_PP_BONUSES, NULL);
 
     move1ppBonus = (allMovesPPBonuses & gPPUpGetMask[sMoveSelectionCursorPos]) >> (sMoveSelectionCursorPos * 2);
     move2ppBonus = (allMovesPPBonuses & gPPUpGetMask[sMoveSwapCursorPos]) >> (sMoveSwapCursorPos * 2);
@@ -4148,11 +4148,11 @@ static void PokeSum_CreateMonPicSprite(void)
 
     sMonPicBounceState = AllocZeroed(sizeof(struct MonPicBounceState));
 
-    species = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES_OR_EGG);
-    personality = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PERSONALITY);
+    species = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES_OR_EGG, NULL);
+    personality = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PERSONALITY, NULL);
     if(species == SPECIES_DEOXYS)
     {
-        switch(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_FORME))
+        switch(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_FORME, NULL))
         {
             case 1: //Attack Forme
                 species = 65531;
@@ -4168,7 +4168,7 @@ static void PokeSum_CreateMonPicSprite(void)
                 break;
         }
     }
-    trainerId = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_OT_ID);
+    trainerId = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_OT_ID, NULL);
 
     if (sMonSummaryScreen->savedCallback == CB2_ReturnToTradeMenuFromSummary)
     {
@@ -4207,7 +4207,7 @@ static void PokeSum_SetMonPicSpriteCallback(u16 spriteId)
 
     if (sMonSummaryScreen->isEgg == TRUE)
     {
-        u8 friendship = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_FRIENDSHIP);
+        u8 friendship = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_FRIENDSHIP, NULL);
 
         if (friendship <= 5)
             sMonPicBounceState->vigor = 2;
@@ -4232,8 +4232,8 @@ static void PokeSum_SetMonPicSpriteCallback(u16 spriteId)
         return;
     }
 
-    curHp = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP);
-    maxHp = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MAX_HP);
+    curHp = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP, NULL);
+    maxHp = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MAX_HP, NULL);
 
     if (curHp == maxHp)
         sMonPicBounceState->vigor = 3;
@@ -4264,7 +4264,7 @@ static void CreateBallIconObj(void)
     u8 ballId;
 
     if (!sMonSummaryScreen->isEgg)
-        ballItemId = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_POKEBALL);
+        ballItemId = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_POKEBALL, NULL);
     else
         ballItemId = 0;
 
@@ -4294,11 +4294,11 @@ static void PokeSum_CreateMonIconSprite(void)
     u16 species;
     u32 personality;
 
-    species = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES_OR_EGG);
-    personality = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PERSONALITY);
+    species = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES_OR_EGG, NULL);
+    personality = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PERSONALITY, NULL);
     if(species == SPECIES_DEOXYS)
      {
-         switch(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_FORME))
+         switch(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_FORME, NULL))
          {
              case 1: //Attack Forme
                  species = 65531;
@@ -4348,7 +4348,7 @@ static void PokeSum_ShowOrHideMonIconSprite(bool8 invisible)
 static void PokeSum_DestroyMonIconSprite(void)
 {
     u16 species;
-    species = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES_OR_EGG);
+    species = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES_OR_EGG, NULL);
     SafeFreeMonIconPalette(species);
     DestroyMonIcon(&gSprites[sMonSummaryScreen->monIconSpriteId]);
 }
@@ -4524,7 +4524,7 @@ static void DestroyMonStatusIconObj(void)
 
 static void UpdateMonStatusIconObj(void)
 {
-    sMonSummaryScreen->curMonStatusAilment = StatusToAilment(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_STATUS));
+    sMonSummaryScreen->curMonStatusAilment = StatusToAilment(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_STATUS, NULL));
 
     if (sMonSummaryScreen->curMonStatusAilment == AILMENT_NONE)
     {
@@ -4573,8 +4573,8 @@ static void CreateHpBarObjs(u16 tileTag, u16 palTag)
     gfxBufferPtr = AllocZeroed(0x20 * 12);
     LZ77UnCompWram(gSummaryScreen_HpBar_Gfx, gfxBufferPtr);
 
-    curHp = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP);
-    maxHp = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MAX_HP);
+    curHp = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP, NULL);
+    maxHp = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MAX_HP, NULL);
 
     if (maxHp / 4 > curHp)
         hpBarPalTagOffset = 2;
@@ -4642,8 +4642,8 @@ static void UpdateHpBarObjs(void)
     if (sMonSummaryScreen->isEgg)
         return;
 
-    curHp = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP);
-    maxHp = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MAX_HP);
+    curHp = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP, NULL);
+    maxHp = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MAX_HP, NULL);
 
     if (maxHp / 5 >= curHp)
         hpBarPalOffset = 2;
@@ -4786,9 +4786,9 @@ static void UpdateExpBarObjs(void)
     if (sMonSummaryScreen->isEgg)
         return;
 
-    exp = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_EXP);
-    level = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_LEVEL);
-    species = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES);
+    exp = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_EXP, NULL);
+    level = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_LEVEL, NULL);
+    species = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES, NULL);
 
     if (level < 100 && !levelCappedNuzlocke(level))
     {
@@ -5048,7 +5048,7 @@ static void PokeSum_CreateSprites(void)
 
 static void PokeSum_CreateMonMarkingsSprite(void)
 {
-    u32 markings = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MARKINGS);
+    u32 markings = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MARKINGS, NULL);
 
     DestroySpriteAndFreeResources(sMonSummaryScreen->markingSprite);
     sMonSummaryScreen->markingSprite = CreateMonMarkingAllCombosSprite(TAG_PSS_UNK_8C, TAG_PSS_UNK_8C, sMonMarkingSpritePalette);
@@ -5070,7 +5070,7 @@ static void PokeSum_DestroyMonMarkingsSprite(void)
 
 static void PokeSum_ShowOrHideMonMarkingsSprite(u8 invisible)
 {
-    u32 markings = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MARKINGS);
+    u32 markings = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MARKINGS, NULL);
 
     if (markings == 0)
         sMonSummaryScreen->markingSprite->invisible = TRUE;
@@ -5080,7 +5080,7 @@ static void PokeSum_ShowOrHideMonMarkingsSprite(u8 invisible)
 
 static void PokeSum_UpdateMonMarkingsAnim(void)
 {
-    u32 markings = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MARKINGS);
+    u32 markings = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MARKINGS, NULL);
 
     StartSpriteAnim(sMonSummaryScreen->markingSprite, markings);
     PokeSum_ShowOrHideMonMarkingsSprite(FALSE);
@@ -5149,7 +5149,7 @@ static s8 SeekToNextMonInSingleParty(s8 direction)
         if (0 > sLastViewedMonIndex + seekDelta || sLastViewedMonIndex + seekDelta > sMonSummaryScreen->lastIndex)
             return -1;
 
-        if (GetMonData(&partyMons[sLastViewedMonIndex + seekDelta], MON_DATA_IS_EGG) == 0)
+        if (GetMonData(&partyMons[sLastViewedMonIndex + seekDelta], MON_DATA_IS_EGG, NULL) == 0)
             return sLastViewedMonIndex + seekDelta;
     }
 
@@ -5158,7 +5158,7 @@ static s8 SeekToNextMonInSingleParty(s8 direction)
 
 static u8 PokeSum_CanSeekToMon(struct Pokemon * partyMons)
 {
-    if (GetMonData(partyMons, MON_DATA_SPECIES) != SPECIES_NONE && (sMonSummaryScreen->curPageIndex != PSS_PAGE_INFO || !GetMonData(partyMons, MON_DATA_IS_EGG)))
+    if (GetMonData(partyMons, MON_DATA_SPECIES, NULL) != SPECIES_NONE && (sMonSummaryScreen->curPageIndex != PSS_PAGE_INFO || !GetMonData(partyMons, MON_DATA_IS_EGG, NULL)))
         return TRUE;
 
     return FALSE;
@@ -5236,8 +5236,8 @@ static void Task_PokeSum_SwitchDisplayedPokemon(u8 taskId)
     case 2:
         BufferSelectedMonData(&sMonSummaryScreen->currentMon);
 
-        sMonSummaryScreen->isEgg = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_IS_EGG);
-        sMonSummaryScreen->isBadEgg = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SANITY_IS_BAD_EGG);
+        sMonSummaryScreen->isEgg = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_IS_EGG, NULL);
+        sMonSummaryScreen->isBadEgg = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SANITY_IS_BAD_EGG, NULL);
 
         if (sMonSummaryScreen->isBadEgg == TRUE)
             sMonSummaryScreen->isEgg = TRUE;
@@ -5350,12 +5350,12 @@ static void PokeSum_UpdateWin1ActiveFlag(u8 curPageIndex)
 
 static void PokeSum_TryPlayMonCry(void)
 {
-    if (!GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_IS_EGG))
+    if (!GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_IS_EGG, NULL))
     {
         if (ShouldPlayNormalMonCry(&sMonSummaryScreen->currentMon) == TRUE)
-            PlayCry_ByMode(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES_OR_EGG), 0, CRY_MODE_NORMAL);
+            PlayCry_ByMode(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES_OR_EGG, NULL), 0, CRY_MODE_NORMAL);
         else
-            PlayCry_ByMode(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES_OR_EGG), 0, CRY_MODE_WEAK);
+            PlayCry_ByMode(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES_OR_EGG, NULL), 0, CRY_MODE_WEAK);
     }
 }
 
@@ -5369,7 +5369,7 @@ static bool32 PokeSum_IsMonBoldOrGentle(u8 nature)
 
 static bool32 CurrentMonIsFromGBA(void)
 {
-    u8 version = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MET_GAME);
+    u8 version = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MET_GAME, NULL);
 
     if (version == VERSION_LEAF_GREEN
         || version == VERSION_FIRE_RED

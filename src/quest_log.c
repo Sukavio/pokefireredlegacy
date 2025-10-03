@@ -675,7 +675,7 @@ void QL_ResetPartyAndPC(void)
             for (j = 0; j < IN_BOX_COUNT; j++)
             {
                 struct BoxPokemon * boxMon = GetBoxedMonPtr(i, j);
-                if (!GetBoxMonData(boxMon, MON_DATA_SANITY_HAS_SPECIES))
+                if (!GetBoxMonData(boxMon, MON_DATA_SANITY_HAS_SPECIES, NULL))
                 {
                     // Replace the additional slots with placeholder Pokémon.
                     CopyMon(boxMon, &prev->mon.box, sizeof(struct BoxPokemon));
@@ -704,7 +704,7 @@ static u16 QuestLog_GetPartyCount(void)
 
     for (i = 0; i < PARTY_SIZE; i++)
     {
-        if (GetMonData(&gPlayerParty[i], MON_DATA_SANITY_HAS_SPECIES))
+        if (GetMonData(&gPlayerParty[i], MON_DATA_SANITY_HAS_SPECIES, NULL))
             count++;
     }
 

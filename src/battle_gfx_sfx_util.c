@@ -325,10 +325,10 @@ void BattleLoadOpponentMonSpriteGfx(struct Pokemon *mon, u8 battlerId)
     const void *lzPaletteData;
     void *buffer;
 
-    monsPersonality = GetMonData(mon, MON_DATA_PERSONALITY);
+    monsPersonality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
     if (gBattleSpritesDataPtr->battlerData[battlerId].transformSpecies == SPECIES_NONE)
     {
-        species = GetMonData(mon, MON_DATA_SPECIES);
+        species = GetMonData(mon, MON_DATA_SPECIES, NULL);
         currentPersonality = monsPersonality;
     }
     else
@@ -336,7 +336,7 @@ void BattleLoadOpponentMonSpriteGfx(struct Pokemon *mon, u8 battlerId)
         species = gBattleSpritesDataPtr->battlerData[battlerId].transformSpecies;
         currentPersonality = gTransformedPersonalities[battlerId];
     }
-    otId = GetMonData(mon, MON_DATA_OT_ID);
+    otId = GetMonData(mon, MON_DATA_OT_ID, NULL);
     position = GetBattlerPosition(battlerId);
     HandleLoadSpecialPokePic_DontHandleDeoxys(&gMonFrontPicTable[species],
                                               gMonSpritesGfxPtr->sprites[position],
@@ -374,14 +374,14 @@ void BattleLoadPlayerMonSpriteGfx(struct Pokemon *mon, u8 battlerId)
     const void *lzPaletteData;
     void *buffer;
 
-    monsPersonality = GetMonData(mon, MON_DATA_PERSONALITY);
+    monsPersonality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
     if (gBattleSpritesDataPtr->battlerData[battlerId].transformSpecies == SPECIES_NONE)
     {
-        species = GetMonData(mon, MON_DATA_SPECIES);
+        species = GetMonData(mon, MON_DATA_SPECIES, NULL);
         currentPersonality = monsPersonality;
         if(species == SPECIES_DEOXYS)
         {
-            currentPersonality = GetMonData(mon, MON_DATA_FORME);
+            currentPersonality = GetMonData(mon, MON_DATA_FORME, NULL);
         }
     }
     else
@@ -389,7 +389,7 @@ void BattleLoadPlayerMonSpriteGfx(struct Pokemon *mon, u8 battlerId)
         species = gBattleSpritesDataPtr->battlerData[battlerId].transformSpecies;
         currentPersonality = gTransformedPersonalities[battlerId];
     }
-    otId = GetMonData(mon, MON_DATA_OT_ID);
+    otId = GetMonData(mon, MON_DATA_OT_ID, NULL);
     position = GetBattlerPosition(battlerId);
     if (ShouldIgnoreDeoxysForm(DEOXYS_CHECK_BATTLE_SPRITE, battlerId) == TRUE || gBattleSpritesDataPtr->battlerData[battlerId].transformSpecies != SPECIES_NONE)
         HandleLoadSpecialPokePic_DontHandleDeoxys(&gMonBackPicTable[species],
@@ -669,9 +669,9 @@ void HandleSpeciesGfxDataChange(u8 battlerAtk, u8 battlerDef, u8 transformType)
         void *dst;
 
         position = GetBattlerPosition(battlerAtk);
-        targetSpecies = GetMonData(&gEnemyParty[gBattlerPartyIndexes[battlerAtk]], MON_DATA_SPECIES);
-        personalityValue = GetMonData(&gEnemyParty[gBattlerPartyIndexes[battlerAtk]], MON_DATA_PERSONALITY);
-        otId = GetMonData(&gEnemyParty[gBattlerPartyIndexes[battlerAtk]], MON_DATA_OT_ID);
+        targetSpecies = GetMonData(&gEnemyParty[gBattlerPartyIndexes[battlerAtk]], MON_DATA_SPECIES, NULL);
+        personalityValue = GetMonData(&gEnemyParty[gBattlerPartyIndexes[battlerAtk]], MON_DATA_PERSONALITY, NULL);
+        otId = GetMonData(&gEnemyParty[gBattlerPartyIndexes[battlerAtk]], MON_DATA_OT_ID, NULL);
         HandleLoadSpecialPokePic_DontHandleDeoxys(&gMonFrontPicTable[targetSpecies],
                                                   gMonSpritesGfxPtr->sprites[position],
                                                   targetSpecies,
@@ -711,13 +711,13 @@ void HandleSpeciesGfxDataChange(u8 battlerAtk, u8 battlerDef, u8 transformType)
 
         position = GetBattlerPosition(battlerAtk);
         if (GetBattlerSide(battlerDef) == B_SIDE_OPPONENT)
-            targetSpecies = GetMonData(&gEnemyParty[gBattlerPartyIndexes[battlerDef]], MON_DATA_SPECIES);
+            targetSpecies = GetMonData(&gEnemyParty[gBattlerPartyIndexes[battlerDef]], MON_DATA_SPECIES, NULL);
         else
-            targetSpecies = GetMonData(&gPlayerParty[gBattlerPartyIndexes[battlerDef]], MON_DATA_SPECIES);
+            targetSpecies = GetMonData(&gPlayerParty[gBattlerPartyIndexes[battlerDef]], MON_DATA_SPECIES, NULL);
         if (GetBattlerSide(battlerAtk) == B_SIDE_PLAYER)
         {
-            personalityValue = GetMonData(&gPlayerParty[gBattlerPartyIndexes[battlerAtk]], MON_DATA_PERSONALITY);
-            otId = GetMonData(&gPlayerParty[gBattlerPartyIndexes[battlerAtk]], MON_DATA_OT_ID);
+            personalityValue = GetMonData(&gPlayerParty[gBattlerPartyIndexes[battlerAtk]], MON_DATA_PERSONALITY, NULL);
+            otId = GetMonData(&gPlayerParty[gBattlerPartyIndexes[battlerAtk]], MON_DATA_OT_ID, NULL);
 
             HandleLoadSpecialPokePic_DontHandleDeoxys(&gMonBackPicTable[targetSpecies],
                                                       gMonSpritesGfxPtr->sprites[position],
@@ -726,8 +726,8 @@ void HandleSpeciesGfxDataChange(u8 battlerAtk, u8 battlerDef, u8 transformType)
         }
         else
         {
-            personalityValue = GetMonData(&gEnemyParty[gBattlerPartyIndexes[battlerAtk]], MON_DATA_PERSONALITY);
-            otId = GetMonData(&gEnemyParty[gBattlerPartyIndexes[battlerAtk]], MON_DATA_OT_ID);
+            personalityValue = GetMonData(&gEnemyParty[gBattlerPartyIndexes[battlerAtk]], MON_DATA_PERSONALITY, NULL);
+            otId = GetMonData(&gEnemyParty[gBattlerPartyIndexes[battlerAtk]], MON_DATA_OT_ID, NULL);
 
             HandleLoadSpecialPokePic_DontHandleDeoxys(&gMonFrontPicTable[targetSpecies],
                                                       gMonSpritesGfxPtr->sprites[position],
@@ -813,8 +813,8 @@ void ClearBehindSubstituteBit(u8 battlerId)
 
 void HandleLowHpMusicChange(struct Pokemon *mon, u8 battlerId)
 {
-    u16 hp = GetMonData(mon, MON_DATA_HP);
-    u16 maxHP = GetMonData(mon, MON_DATA_MAX_HP);
+    u16 hp = GetMonData(mon, MON_DATA_HP, NULL);
+    u16 maxHP = GetMonData(mon, MON_DATA_MAX_HP, NULL);
 
     if (GetHPBarLevel(hp, maxHP) == HP_BAR_RED)
     {
@@ -848,8 +848,8 @@ void BattleStopLowHpSound(void)
 // not used
 static u8 GetMonHPBarLevel(struct Pokemon *mon)
 {
-    u16 hp = GetMonData(mon, MON_DATA_HP);
-    u16 maxHP = GetMonData(mon, MON_DATA_MAX_HP);
+    u16 hp = GetMonData(mon, MON_DATA_HP, NULL);
+    u16 maxHP = GetMonData(mon, MON_DATA_MAX_HP, NULL);
 
     return GetHPBarLevel(hp, maxHP);
 }
@@ -863,9 +863,9 @@ void HandleBattleLowHpMusicChange(void)
         u8 battler1PartyId = GetPartyIdFromBattlePartyId(gBattlerPartyIndexes[playerBattler1]);
         u8 battler2PartyId = GetPartyIdFromBattlePartyId(gBattlerPartyIndexes[playerBattler2]);
 
-        if (GetMonData(&gPlayerParty[battler1PartyId], MON_DATA_HP) != 0)
+        if (GetMonData(&gPlayerParty[battler1PartyId], MON_DATA_HP, NULL) != 0)
             HandleLowHpMusicChange(&gPlayerParty[battler1PartyId], playerBattler1);
-        if (IsDoubleBattle() && GetMonData(&gPlayerParty[battler2PartyId], MON_DATA_HP) != 0)
+        if (IsDoubleBattle() && GetMonData(&gPlayerParty[battler2PartyId], MON_DATA_HP, NULL) != 0)
             HandleLowHpMusicChange(&gPlayerParty[battler2PartyId], playerBattler2);
     }
 }
@@ -1051,11 +1051,11 @@ bool32 ShouldPlayNormalMonCry(struct Pokemon *mon)
     s16 hp, maxHP;
     s32 barLevel;
 
-    if (GetMonData(mon, MON_DATA_STATUS) & (STATUS1_ANY | STATUS1_TOXIC_COUNTER))
+    if (GetMonData(mon, MON_DATA_STATUS, NULL) & (STATUS1_ANY | STATUS1_TOXIC_COUNTER))
         return FALSE;
 
-    hp = GetMonData(mon, MON_DATA_HP);
-    maxHP = GetMonData(mon, MON_DATA_MAX_HP);
+    hp = GetMonData(mon, MON_DATA_HP, NULL);
+    maxHP = GetMonData(mon, MON_DATA_MAX_HP, NULL);
 
     barLevel = GetHPBarLevel(hp, maxHP);
     if (barLevel <= HP_BAR_YELLOW)

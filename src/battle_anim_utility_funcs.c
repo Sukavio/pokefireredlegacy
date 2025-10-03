@@ -328,9 +328,9 @@ void AnimTask_DrawFallingWhiteLinesOnAttacker(u8 taskId)
         }
     }
     if (GetBattlerSide(gBattleAnimAttacker) != B_SIDE_PLAYER)
-        species = GetMonData(&gEnemyParty[gBattlerPartyIndexes[gBattleAnimAttacker]], MON_DATA_SPECIES);
+        species = GetMonData(&gEnemyParty[gBattlerPartyIndexes[gBattleAnimAttacker]], MON_DATA_SPECIES, NULL);
     else
-        species = GetMonData(&gPlayerParty[gBattlerPartyIndexes[gBattleAnimAttacker]], MON_DATA_SPECIES);
+        species = GetMonData(&gPlayerParty[gBattlerPartyIndexes[gBattleAnimAttacker]], MON_DATA_SPECIES, NULL);
     spriteId = GetAnimBattlerSpriteId(ANIM_ATTACKER);
     newSpriteId = CreateInvisibleSpriteCopy(gBattleAnimAttacker, spriteId, species);
     GetBattleAnimBg1Data(&animBgData);
@@ -435,9 +435,9 @@ static void StatsChangeAnimation_Step1(u8 taskId)
         }
     }
     if (GetBattlerSide(sAnimStatsChangeData->battler1) != B_SIDE_PLAYER)
-        sAnimStatsChangeData->species = GetMonData(&gEnemyParty[gBattlerPartyIndexes[sAnimStatsChangeData->battler1]], MON_DATA_SPECIES);
+        sAnimStatsChangeData->species = GetMonData(&gEnemyParty[gBattlerPartyIndexes[sAnimStatsChangeData->battler1]], MON_DATA_SPECIES, NULL);
     else
-        sAnimStatsChangeData->species = GetMonData(&gPlayerParty[gBattlerPartyIndexes[sAnimStatsChangeData->battler1]], MON_DATA_SPECIES);
+        sAnimStatsChangeData->species = GetMonData(&gPlayerParty[gBattlerPartyIndexes[sAnimStatsChangeData->battler1]], MON_DATA_SPECIES, NULL);
     gTasks[taskId].func = StatsChangeAnimation_Step2;
 }
 
@@ -753,9 +753,9 @@ void StartMonScrollingBgMask(u8 taskId, s32 unused, u16 scrollSpeed, u8 battler1
         ((vBgCnt *)&bg1Cnt)->charBaseBlock = 1;
     SetGpuReg(REG_OFFSET_BG1CNT, bg1Cnt);
     if (GetBattlerSide(battler1) != B_SIDE_PLAYER)
-        species = GetMonData(&gEnemyParty[gBattlerPartyIndexes[battler1]], MON_DATA_SPECIES);
+        species = GetMonData(&gEnemyParty[gBattlerPartyIndexes[battler1]], MON_DATA_SPECIES, NULL);
     else
-        species = GetMonData(&gPlayerParty[gBattlerPartyIndexes[battler1]], MON_DATA_SPECIES);
+        species = GetMonData(&gPlayerParty[gBattlerPartyIndexes[battler1]], MON_DATA_SPECIES, NULL);
     spriteId = CreateInvisibleSpriteCopy(battler1, gBattlerSpriteIds[battler1], species);
     if (includePartner)
         newSpriteId = CreateInvisibleSpriteCopy(battler2, gBattlerSpriteIds[battler2], species);

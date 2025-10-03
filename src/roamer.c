@@ -144,14 +144,14 @@ void CreateInitialRoamerMon(void)
     ROAMER->level = 50;
     ROAMER->status = 0;
     ROAMER->active = TRUE;
-    ROAMER->ivs = GetMonData(mon, MON_DATA_IVS);
-    ROAMER->personality = GetMonData(mon, MON_DATA_PERSONALITY);
-    ROAMER->hp = GetMonData(mon, MON_DATA_MAX_HP);
-    ROAMER->cool = GetMonData(mon, MON_DATA_COOL);
-    ROAMER->beauty = GetMonData(mon, MON_DATA_BEAUTY);
-    ROAMER->cute = GetMonData(mon, MON_DATA_CUTE);
-    ROAMER->smart = GetMonData(mon, MON_DATA_SMART);
-    ROAMER->tough = GetMonData(mon, MON_DATA_TOUGH);
+    ROAMER->ivs = GetMonData(mon, MON_DATA_IVS, NULL);
+    ROAMER->personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
+    ROAMER->hp = GetMonData(mon, MON_DATA_MAX_HP, NULL);
+    ROAMER->cool = GetMonData(mon, MON_DATA_COOL, NULL);
+    ROAMER->beauty = GetMonData(mon, MON_DATA_BEAUTY, NULL);
+    ROAMER->cute = GetMonData(mon, MON_DATA_CUTE, NULL);
+    ROAMER->smart = GetMonData(mon, MON_DATA_SMART, NULL);
+    ROAMER->tough = GetMonData(mon, MON_DATA_TOUGH, NULL);
     sRoamerLocation[MAP_GRP] = ROAMER_MAP_GROUP;
     sRoamerLocation[MAP_NUM] = sRoamerLocations[Random() % NUM_LOCATION_SETS][0];
 }
@@ -278,8 +278,8 @@ bool8 TryStartRoamerEncounter(void)
 }
 void UpdateRoamerHPStatus(struct Pokemon *mon)
 {
-    ROAMER->hp = GetMonData(mon, MON_DATA_HP);
-    ROAMER->status = GetMonData(mon, MON_DATA_STATUS);
+    ROAMER->hp = GetMonData(mon, MON_DATA_HP, NULL);
+    ROAMER->status = GetMonData(mon, MON_DATA_STATUS, NULL);
 
     RoamerMoveToOtherLocationSet();
 }

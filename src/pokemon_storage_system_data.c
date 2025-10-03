@@ -142,7 +142,7 @@ static u16 GetSpeciesAtCursorPosition(void)
     switch (sCursorArea)
     {
     case CURSOR_AREA_IN_PARTY:
-        return GetMonData(&gPlayerParty[sCursorPosition], MON_DATA_SPECIES);
+        return GetMonData(&gPlayerParty[sCursorPosition], MON_DATA_SPECIES, NULL);
     case CURSOR_AREA_IN_BOX:
         return GetCurrentBoxMonData(sCursorPosition, MON_DATA_SPECIES);
     default:
@@ -923,7 +923,7 @@ s16 CompactPartySlots(void)
 
     for (i = 0, last = 0; i < PARTY_SIZE; i++)
     {
-        u16 species = GetMonData(gPlayerParty + i, MON_DATA_SPECIES);
+        u16 species = GetMonData(gPlayerParty + i, MON_DATA_SPECIES, NULL);
         if (species != SPECIES_NONE)
         {
             if (i != last)
@@ -967,7 +967,7 @@ bool8 CanShiftMon(void)
     {
         if (sCursorArea == CURSOR_AREA_IN_PARTY && CountPartyAliveNonEggMonsExcept(sCursorPosition) == 0)
         {
-            if (gStorage->displayMonIsEgg || GetMonData(&gStorage->movingMon, MON_DATA_HP) == 0)
+            if (gStorage->displayMonIsEgg || GetMonData(&gStorage->movingMon, MON_DATA_HP, NULL) == 0)
                 return FALSE;
         }
         return TRUE;
@@ -1046,51 +1046,51 @@ static void SetDisplayMonData(void *pokemon, u8 mode)
     {
         struct Pokemon *mon = (struct Pokemon *)pokemon;
 
-        gStorage->displayMonSpecies = GetMonData(mon, MON_DATA_SPECIES_OR_EGG);
+        gStorage->displayMonSpecies = GetMonData(mon, MON_DATA_SPECIES_OR_EGG, NULL);
         if (gStorage->displayMonSpecies != SPECIES_NONE)
         {
-            sanityIsBagEgg = GetMonData(mon, MON_DATA_SANITY_IS_BAD_EGG);
+            sanityIsBagEgg = GetMonData(mon, MON_DATA_SANITY_IS_BAD_EGG, NULL);
             if (sanityIsBagEgg)
                 gStorage->displayMonIsEgg = TRUE;
             else
-                gStorage->displayMonIsEgg = GetMonData(mon, MON_DATA_IS_EGG);
+                gStorage->displayMonIsEgg = GetMonData(mon, MON_DATA_IS_EGG, NULL);
 
             GetMonData(mon, MON_DATA_NICKNAME, gStorage->displayMonNickname);
             StringGet_Nickname(gStorage->displayMonNickname);
-            gStorage->displayMonLevel = GetMonData(mon, MON_DATA_LEVEL);
-            gStorage->displayMonMarkings = GetMonData(mon, MON_DATA_MARKINGS);
+            gStorage->displayMonLevel = GetMonData(mon, MON_DATA_LEVEL, NULL);
+            gStorage->displayMonMarkings = GetMonData(mon, MON_DATA_MARKINGS, NULL);
             if(gStorage->displayMonSpecies == SPECIES_DEOXYS)
-                gStorage->displayMonSpecies = GetDeoxysSpeciesFromForme(GetMonData(mon, MON_DATA_FORME));
-            gStorage->displayMonPersonality = GetMonData(mon, MON_DATA_PERSONALITY);
+                gStorage->displayMonSpecies = GetDeoxysSpeciesFromForme(GetMonData(mon, MON_DATA_FORME, NULL));
+            gStorage->displayMonPersonality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
             gStorage->displayMonPalette = GetMonFrontSpritePal(mon);
             gender = GetMonGender(mon);
-            gStorage->displayMonItemId = GetMonData(mon, MON_DATA_HELD_ITEM);
+            gStorage->displayMonItemId = GetMonData(mon, MON_DATA_HELD_ITEM, NULL);
         }
     }
     else if (mode == MODE_BOX)
     {
         struct BoxPokemon *boxMon = (struct BoxPokemon *)pokemon;
 
-        gStorage->displayMonSpecies = GetBoxMonData(pokemon, MON_DATA_SPECIES_OR_EGG);
+        gStorage->displayMonSpecies = GetBoxMonData(pokemon, MON_DATA_SPECIES_OR_EGG, NULL);
         if (gStorage->displayMonSpecies != SPECIES_NONE)
         {
-            u32 otId = GetBoxMonData(boxMon, MON_DATA_OT_ID);
-            sanityIsBagEgg = GetBoxMonData(boxMon, MON_DATA_SANITY_IS_BAD_EGG);
+            u32 otId = GetBoxMonData(boxMon, MON_DATA_OT_ID, NULL);
+            sanityIsBagEgg = GetBoxMonData(boxMon, MON_DATA_SANITY_IS_BAD_EGG, NULL);
             if (sanityIsBagEgg)
                 gStorage->displayMonIsEgg = TRUE;
             else
-                gStorage->displayMonIsEgg = GetBoxMonData(boxMon, MON_DATA_IS_EGG);
+                gStorage->displayMonIsEgg = GetBoxMonData(boxMon, MON_DATA_IS_EGG, NULL);
 
             GetBoxMonData(boxMon, MON_DATA_NICKNAME, gStorage->displayMonNickname);
             StringGet_Nickname(gStorage->displayMonNickname);
             gStorage->displayMonLevel = GetLevelFromBoxMonExp(boxMon);
-            gStorage->displayMonMarkings = GetBoxMonData(boxMon, MON_DATA_MARKINGS);
+            gStorage->displayMonMarkings = GetBoxMonData(boxMon, MON_DATA_MARKINGS, NULL);
             if(gStorage->displayMonSpecies == SPECIES_DEOXYS)
-                gStorage->displayMonSpecies = GetDeoxysSpeciesFromForme(GetBoxMonData(boxMon, MON_DATA_FORME));
-            gStorage->displayMonPersonality = GetBoxMonData(boxMon, MON_DATA_PERSONALITY);
+                gStorage->displayMonSpecies = GetDeoxysSpeciesFromForme(GetBoxMonData(boxMon, MON_DATA_FORME, NULL));
+            gStorage->displayMonPersonality = GetBoxMonData(boxMon, MON_DATA_PERSONALITY, NULL);
             gStorage->displayMonPalette = GetMonSpritePalFromSpeciesAndPersonality(gStorage->displayMonSpecies, otId, gStorage->displayMonPersonality);
             gender = GetGenderFromSpeciesAndPersonality(gStorage->displayMonSpecies, gStorage->displayMonPersonality);
-            gStorage->displayMonItemId = GetBoxMonData(boxMon, MON_DATA_HELD_ITEM);
+            gStorage->displayMonItemId = GetBoxMonData(boxMon, MON_DATA_HELD_ITEM, NULL);
         }
     }
     else

@@ -753,8 +753,8 @@ static void LoadTradeMonPic(u8 whichParty, u8 state)
     {
     case 0:
         // Load graphics
-        species = GetMonData(mon, MON_DATA_SPECIES_OR_EGG);
-        personality = GetMonData(mon, MON_DATA_PERSONALITY);
+        species = GetMonData(mon, MON_DATA_SPECIES_OR_EGG, NULL);
+        personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
 
         if (whichParty == TRADE_PLAYER)
             HandleLoadSpecialPokePic(&gMonFrontPicTable[species], gMonSpritesGfxPtr->sprites[1], species, personality);
@@ -881,8 +881,8 @@ void CB2_LinkTrade(void)
     case 10:
         BeginNormalPaletteFade(PALETTES_ALL, 0, 16, 0, RGB_BLACK);
         ShowBg(0);
-        sTradeAnim->questLogData.speciesSent = GetMonData(&gPlayerParty[gSelectedTradeMonPositions[TRADE_PLAYER]], MON_DATA_SPECIES_OR_EGG);
-        sTradeAnim->questLogData.speciesReceived = GetMonData(&gEnemyParty[gSelectedTradeMonPositions[TRADE_PARTNER] % PARTY_SIZE], MON_DATA_SPECIES_OR_EGG);
+        sTradeAnim->questLogData.speciesSent = GetMonData(&gPlayerParty[gSelectedTradeMonPositions[TRADE_PLAYER]], MON_DATA_SPECIES_OR_EGG, NULL);
+        sTradeAnim->questLogData.speciesReceived = GetMonData(&gEnemyParty[gSelectedTradeMonPositions[TRADE_PARTNER] % PARTY_SIZE], MON_DATA_SPECIES_OR_EGG, NULL);
         memcpy(sTradeAnim->questLogData.partnerName, gLinkPlayers[GetMultiplayerId() ^ 1].name, PLAYER_NAME_LENGTH);
         gMain.state++;
         break;
@@ -1032,7 +1032,7 @@ static void UpdatePokedexForReceivedMon(u8 partyIdx)
 {
     struct Pokemon * mon = &gPlayerParty[partyIdx];
 
-    if (!GetMonData(mon, MON_DATA_IS_EGG))
+    if (!GetMonData(mon, MON_DATA_IS_EGG, NULL))
     {
         u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
         u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
@@ -1058,10 +1058,10 @@ static void TradeMons(u8 playerPartyIdx, u8 partnerPartyIdx)
 
     // Get whether the offered Pokemon have mail
     struct Pokemon * playerMon = &gPlayerParty[playerPartyIdx];
-    u16 playerMail = GetMonData(playerMon, MON_DATA_MAIL);
+    u16 playerMail = GetMonData(playerMon, MON_DATA_MAIL, NULL);
 
     struct Pokemon * partnerMon = &gEnemyParty[partnerPartyIdx];
-    u16 partnerMail = GetMonData(partnerMon, MON_DATA_MAIL);
+    u16 partnerMail = GetMonData(partnerMon, MON_DATA_MAIL, NULL);
 
     // The mail attached to the sent Pokemon no longer exists in your file.
     if (playerMail != MAIL_NONE)
@@ -1072,7 +1072,7 @@ static void TradeMons(u8 playerPartyIdx, u8 partnerPartyIdx)
     // By default, a Pokemon received from a trade will have 70 Friendship.
     // Eggs use Friendship to track egg cycles, so don't set this on Eggs.
     friendship = 70;
-    if (!GetMonData(playerMon, MON_DATA_IS_EGG))
+    if (!GetMonData(playerMon, MON_DATA_IS_EGG, NULL))
         SetMonData(playerMon, MON_DATA_FRIENDSHIP, &friendship);
 
     // Associate your partner's mail with the Pokemon they sent over.
@@ -1084,8 +1084,8 @@ static void TradeMons(u8 playerPartyIdx, u8 partnerPartyIdx)
         TryEnableNationalDexFromLinkPartner();
 
     //fixing Pomeg glitched Pokemon coming in from partner
-    maxHP = GetMonData(playerMon, MON_DATA_MAX_HP);
-    if(GetMonData(playerMon, MON_DATA_HP) > maxHP)
+    maxHP = GetMonData(playerMon, MON_DATA_MAX_HP, NULL);
+    if(GetMonData(playerMon, MON_DATA_HP, NULL) > maxHP, NULL)
     {
         SetMonData(playerMon, MON_DATA_HP, &maxHP);
     }
@@ -2464,7 +2464,7 @@ static void BufferInGameTradeMonName(void)
 static void CreateInGameTradePokemonInternal(u8 playerSlot, u8 inGameTradeIdx)
 {
     const struct InGameTrade * inGameTrade = &sInGameTrades[inGameTradeIdx];
-    u8 level = GetMonData(&gPlayerParty[playerSlot], MON_DATA_LEVEL);
+    u8 level = GetMonData(&gPlayerParty[playerSlot], MON_DATA_LEVEL, NULL);
     struct Mail mail;
     u8 metLocation = METLOC_IN_GAME_TRADE;
     struct Pokemon * tradeMon = &gEnemyParty[0];
@@ -2521,10 +2521,10 @@ static void GetInGameTradeMail(struct Mail * mail, const struct InGameTrade * in
 
 u16 GetTradeSpecies(void)
 {
-    if (GetMonData(&gPlayerParty[gSpecialVar_0x8005], MON_DATA_IS_EGG))
+    if (GetMonData(&gPlayerParty[gSpecialVar_0x8005], MON_DATA_IS_EGG, NULL))
         return SPECIES_NONE;
     else
-        return GetMonData(&gPlayerParty[gSpecialVar_0x8005], MON_DATA_SPECIES);
+        return GetMonData(&gPlayerParty[gSpecialVar_0x8005], MON_DATA_SPECIES, NULL);
 }
 
 void CreateInGameTradePokemon(void)
@@ -2769,7 +2769,7 @@ static void CheckPartnersMonForRibbons(void)
     u8 numRibbons = 0;
     u8 i;
     for (i = 0; i < (MON_DATA_UNUSED_RIBBONS - MON_DATA_CHAMPION_RIBBON); i++)
-        numRibbons += GetMonData(&gEnemyParty[gSelectedTradeMonPositions[TRADE_PARTNER] % PARTY_SIZE], MON_DATA_CHAMPION_RIBBON + i);
+        numRibbons += GetMonData(&gEnemyParty[gSelectedTradeMonPositions[TRADE_PARTNER] % PARTY_SIZE], MON_DATA_CHAMPION_RIBBON + i, NULL);
 
     if (numRibbons != 0)
         FlagSet(FLAG_SYS_RIBBON_GET);
