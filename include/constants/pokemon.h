@@ -111,6 +111,7 @@
 #define BEST_IV_SPREAD_HIDDEN_POWER_ROCK     {31, 31, 30, 30, 31, 30}
 #define BEST_IV_SPREAD_HIDDEN_POWER_STEEL    {31, 31, 31, 31, 31, 30}
 #define BEST_IV_SPREAD_HIDDEN_POWER_WATER    {31, 31, 31, 30, 30, 31}
+#define BEST_IV_SPREAD_HIDDEN_POWER_FAIRY    {30, 30, 31, 31, 31, 31}
 #define BEST_IV_SPREAD_SPECIAL               {31,  0, 31, 31, 31, 31}
 #define BEST_IV_SPREAD_TRICK_ROOM            {31, 31, 31,  0, 31, 31}
 #define BEST_IV_SPREAD_SPECIAL_TRICK_ROOM    {31,  0, 31,  0, 31, 31}
@@ -143,7 +144,8 @@
 #define TYPE_ICE            15
 #define TYPE_DRAGON         16
 #define TYPE_DARK           17
-#define NUMBER_OF_MON_TYPES 18
+#define TYPE_FAIRY          18
+#define NUMBER_OF_MON_TYPES 19
 
 // Pokemon egg groups
 #define EGG_GROUP_NONE         0
