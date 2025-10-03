@@ -5,10 +5,10 @@ GAME_REVISION ?= 0
 GAME_LANGUAGE ?= ENGLISH
 
 # Builds the ROM using a modern compiler
-MODERN        ?= 0
+MODERN        ?= 1
+MAKEFLAGS     += -j14
 # Compares the ROM to a checksum of the original - only makes sense using when non-modern
 COMPARE       ?= 0
-
 KEEP_TEMPS    ?= 0
 
 ifeq (modern,$(MAKECMDGOALS))
